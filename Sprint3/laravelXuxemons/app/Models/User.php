@@ -16,11 +16,22 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $primaryKey = 'id';
     protected $fillable = [
-        'name',
+        'nick',
         'email',
         'password',
+        'rol',
+        'remember_token',
     ];
+
+    /**
+     * Los Xuxemons que pertenecen a este usuario.
+     */
+    public function xuxemons()
+    {
+        return $this->belongsToMany(Xuxemons::class, 'xuxemons_users');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
