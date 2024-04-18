@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angularXuxemons'`, () => {
+  it(`should have as title 'angularCarpeta'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angularXuxemons');
+    expect(app.title).toEqual('angularCarpeta');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('angularXuxemons app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('angularCarpeta app is running!');
   });
 });

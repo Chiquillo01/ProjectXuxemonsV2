@@ -9,7 +9,7 @@ class XuxemonsUser extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'xuxemon_id';
     protected $fillable = [
         'xuxemon_id',
         'user_id',
@@ -17,7 +17,7 @@ class XuxemonsUser extends Model
         'activo',
         'favorito',
     ];
-
+    
     /**
      * Obtener el Xuxemon asociado a este registro pivot.
      */
@@ -34,3 +34,4 @@ class XuxemonsUser extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 }
+

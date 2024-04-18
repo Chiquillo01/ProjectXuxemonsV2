@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Controller;
 use \App\Http\Controllers\XuxemonsController;
 use \App\Http\Controllers\XuxemonsUserController;
+use App\Http\Controllers\ChuchesController;
 use App\Http\Controllers\ChuchesUserController;
 
 /*
@@ -67,7 +68,7 @@ Route::get('/xuxemonsUserActivos/{userId}', [XuxemonsUserController::class, 'sho
 // ---------------------- //
 
 // Rutas para las chuches //
-Route::get('/activar/horario/{userId}', [ChuchesUserController::class, 'ReclamarHorario']);
+Route::put('/activar/horario/{userId}', [ChuchesUserController::class, 'ReclamarHorario']);
 Route::get('/horario/show/{userId}', [ChuchesUserController::class, 'showHorario']);
 // Crear chuches aleatorias //
 Route::post('/chuches/horario/{userId}', [ChuchesUserController::class, 'horario']);

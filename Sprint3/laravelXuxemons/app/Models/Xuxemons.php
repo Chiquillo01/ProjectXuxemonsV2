@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Xuxemons extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'id';
     protected $fillable = [
         'nombre',
         'tipo',

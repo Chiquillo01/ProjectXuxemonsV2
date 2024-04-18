@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 // Imports necesarios //
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UsersService } from '../services/users/users.service';
-import { TokenService } from '../services/token/token.service';
+import { UsersService } from '../services/users.service';
+import { TokenService } from '../services/token.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -21,9 +21,9 @@ export class LoginComponent implements OnInit {
     public usersService: UsersService,
     public tokenService: TokenService,
     private router: Router
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   /**
    * Función: Login
@@ -34,6 +34,8 @@ export class LoginComponent implements OnInit {
     this.usersService.Login(this.loginForm.value).subscribe({
       next: (data: any) => {
         this.router.navigate(['/home/home']);
+        const token = data.access_token;
+        console.log(data);
         this.tokenService.setToken(data);
       },
       error: (error) => {

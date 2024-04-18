@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // Imports necesarios //
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UsersService } from '../services/users/users.service';
+import { UsersService } from '../services/users.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -32,7 +32,7 @@ export class RegistroComponent implements OnInit {
   Registrar() {
     if (this.registroForm.value.contraseña === this.registroForm.value.RepetirContraseña) {
       this.userService.Registrar(this.registroForm.value).subscribe({
-        next: () => {
+        next: (data) => {
           this.router.navigate(['/login']);
           alert('Usuario registrado correctamente.');
         },
