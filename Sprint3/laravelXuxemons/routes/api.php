@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Controller;
 use \App\Http\Controllers\XuxemonsController;
 use \App\Http\Controllers\XuxemonsUserController;
-use App\Http\Controllers\ChuchesController;
 use App\Http\Controllers\ChuchesUserController;
 
 /*
@@ -21,22 +20,12 @@ use App\Http\Controllers\ChuchesUserController;
 */
 
 //Route::middleware('cors')->group(function () {
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-// Rutas del usuario Usuario // 
-// Registar //
-Route::post('/register', [Controller::class, 'register']);
-// Loguearse //
-Route::post('/login', [Controller::class, 'login']);
-// ---------------------- //
-
+//Route::middleware('auth:sanctum')->group(function () {
 // Rutas para los Xuxemons // 
 // Crear xuxemon //
 Route::post('/xuxemons', [XuxemonsController::class, 'crearXuxemon']);
 // Crear xuxemon aleatorios //
-Route::post('/xuxemons/pc/random/{userId}', [XuxemonsUserController::class, 'debug']);
+Route::post('/xuxemons/pc/random', [XuxemonsUserController::class, 'debug']);
 // Actualizar xuxemon //
 Route::put('/xuxemons/{xuxemons}', [XuxemonsController::class, 'update']);
 // Actualizar tamaño por defecto del xuxemon //
@@ -76,15 +65,11 @@ Route::post('/chuches/horario/{userId}', [ChuchesUserController::class, 'horario
 Route::post('/chuches/random/{userId}', [ChuchesUserController::class, 'debug']);
 // Mostrar todas las xuxes del usuario //
 Route::get('/chuchesUser/{userId}', [ChuchesUserController::class, 'show']);
+//});
 
-
-// // Alimentar xuxemons //
-// Route::put('/xuxemons/users/comer/{xuxemons}', [XuxemonsUserController::class, 'alimentar']);
-
-// 
-
-
-// // Actualizar chuche //
-// Route::put('/chuches/{chuches}', [ChuchesUserController::class, 'updateStack']);
-// ---------------------- //
+// Rutas del usuario Usuario // 
+// Registar //
+Route::post('/register', [Controller::class, 'register']);
+// Loguearse //
+Route::post('/login', [Controller::class, 'login']);
 // ---------------------- //

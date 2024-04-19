@@ -63,8 +63,6 @@ export class CajaComponent implements OnInit {
   getXuxemons() {
     const userToken = this.tokenService.getToken();
 
-    console.log(userToken);
-
     if (userToken !== null) {
       this.xuxemonsService.getAllXuxemonsUser(userToken).subscribe({
         next: (xuxemonsUser: any) => {
@@ -109,10 +107,14 @@ export class CajaComponent implements OnInit {
     const userToken = this.tokenService.getToken();
 
     this.xuxemonsService.createRandomXuxemon(userToken!).subscribe({
-      next: () => {
+      next: (data) => {
+        console.log(data);
+        alert('Xuxemon creardo con exito.');
         this.getXuxemons();
+        
       },
-      error: () => {
+      error: (error) => {
+        console.error(error);
         alert('Xuxemon no se ha podido crear.');
       },
     });

@@ -9,7 +9,7 @@ import { XuxemonsUsers } from '../models/xuxemons/xuxemons.model';
   providedIn: 'root',
 })
 export class XuxemonsService {
-  constructor(private http: HttpClient, public tokenService: TokenService) {}
+  constructor(private http: HttpClient, public tokenService: TokenService) { }
 
   /**
    * Nombre: getAllXuxemons
@@ -63,14 +63,14 @@ export class XuxemonsService {
    * @returns la url de la api
    */
   createRandomXuxemon(userToken: string): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = {
-      headers: { Authorization: `Bearer ${authToken}` },
+    console.log('Este es la segunda comprobación del usuario:' + userToken);
+
+    const body = {
+      token: userToken
     };
 
     return this.http.post<any>(
-      `http://127.0.0.1:8000/api/xuxemons/pc/random/${userToken}`,
-      headers
+      'http://127.0.0.1:8000/api/xuxemons/pc/random', body
     );
   }
 
@@ -203,22 +203,22 @@ export class XuxemonsService {
   }
 
 
-    /**
-   * Nombre: xuxemonActivo
-   * Función: Función para actualizar el nivel evolutivo por defecto del juego
-   * @returns la url de la api
-   */
-    xuxemonFav(userToken: string, xuxemon_id: number): Observable<any> {
-      const authToken = this.tokenService.getToken();
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${authToken}`,
-      });
-  
-      return this.http.post<any>(
-        `http://127.0.0.1:8000/api/xuxemons/${userToken}/favorito/${xuxemon_id}`,
-        headers
-      );
-    }
+  /**
+ * Nombre: xuxemonActivo
+ * Función: Función para actualizar el nivel evolutivo por defecto del juego
+ * @returns la url de la api
+ */
+  xuxemonFav(userToken: string, xuxemon_id: number): Observable<any> {
+    const authToken = this.tokenService.getToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${authToken}`,
+    });
+
+    return this.http.post<any>(
+      `http://127.0.0.1:8000/api/xuxemons/${userToken}/favorito/${xuxemon_id}`,
+      headers
+    );
+  }
 
   /**
    * Nombre: xuxemonActivo
