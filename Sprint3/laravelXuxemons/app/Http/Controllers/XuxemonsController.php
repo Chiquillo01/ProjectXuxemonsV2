@@ -58,20 +58,31 @@ class XuxemonsController extends Controller
      * y crea el update de losdatos xuxemon a traves de una transacción. Sabe el xuxemon a actualizar 
      * gracias al paremetro extra que le llega por la api
      */
-    public function update(Request $request, Xuxemons $xuxemons)
+    public function update(Request $request)
     {
         try {
+            $id_Xuxemon = $request->input('id_Xuxemon');
+            $xuxemonNewDate = $request->input('xuxemonNewDate');
+
             // Valida los datos
             $validados = $request->validate([
-                'nombre' => ['required', 'max:20', 'unique:xuxemons,nombre,' . $xuxemons->id],
-                'tipo' => ['required', 'in:Tierra,Aire,Agua'],
-                'archivo' => ['required', 'unique:xuxemons,archivo,' . $xuxemons->id],
+                'xuxemonNewDate.nombre' => ['required', 'max:20', 'unique:xuxemons,nombre,' . $id_Xuxemon],
+                'xuxemonNewDate.tipo' => ['required', 'in:Tierra,Aire,Agua'],
+                'xuxemonNewDate.archivo' => ['required', 'unique:xuxemons,archivo,' . $id_Xuxemon],
             ]);
 
             // Hace el update dentro de una transaccion
-            DB::transaction(function () use ($validados, $xuxemons) {
-                $xuxemons->update($validados);
-            });
+        DB::transaction(function () use ($validados, $id_Xuxemon) {
+            // Busca el Xuxemon por su ID
+            $xuxemon = Xuxemons::findOrFail($id_Xuxemon);
+
+            // Actualiza el Xuxemon con los datos validados
+            $xuxemon->update([
+                'nombre' => $validados['xuxemonNewDate']['nombre'],
+                'tipo' => $validados['xuxemonNewDate']['tipo'],
+                'archivo' => $validados['xuxemonNewDate']['archivo'],
+            ]);
+        });
 
             // Retorna actualizado de forma satisfactoria
             return response()->json(['message' => 'Se ha actualizado de forma correcta'], 200);
@@ -106,9 +117,11 @@ class XuxemonsController extends Controller
      * Función: gracias al valor que se le pasa por paremetro hace un update
      * a la bd con el nuevo valor, esto lo hace a todos los registros
      */
-    public function updateTam(Request $request, $tamano)
+    public function updateTam(Request $request)
     {
         try {
+            $tamano = $request->input('newTamano.tamano');
+
             DB::transaction(function () use ($tamano) {
                 Xuxemons::query()->update(['tamano' => $tamano]);
             });

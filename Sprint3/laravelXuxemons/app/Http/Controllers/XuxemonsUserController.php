@@ -19,9 +19,7 @@ class XuxemonsUserController extends Controller
      */
     public static function obtenerXuxemonAleatorio()
     {
-        $xuxemonAleatorio = DB::select("SELECT id FROM xuxemons ORDER BY RAND() LIMIT 1");
-
-        return !empty($xuxemonAleatorio) ? $xuxemonAleatorio[0]->id : null;
+        return Xuxemons::inRandomOrder()->first();
     }
 
     /**
@@ -30,39 +28,41 @@ class XuxemonsUserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function debug(Request $request, $userToken)
+    public function debug(Request $request)
     {
         try {
-            
+            // Obtener el token de usuario de la solicitud
+            $userToken = $request->input('token');
+
+            // Busca el id del usuario autorizado
             $user = User::where('remember_token', $userToken)
-            ->first();
+                ->first();
 
+            // Si no exixte usuario retornara el error
             if (!$user) {
-                // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
-                return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
+                return response()->json(['message' => 'Usuario no encontrado', $user], 404);
             }
 
+            // Recoge el id de un xuxemon aleatorio
             $xuxemonAleatorio = self::obtenerXuxemonAleatorio();
-
-            $xuxemon = Xuxemons::where('id', $xuxemonAleatorio)
-            ->first();
-
-            if ($xuxemonAleatorio) {
-                // Crear un nuevo xuxemon asociado al usuario en sesión
-                $nuevoXuxemonUsuario = new XuxemonsUser();
-                $nuevoXuxemonUsuario->xuxemon_id = $xuxemonAleatorio;
-                $nuevoXuxemonUsuario->user_id = $user->id;
-                $nuevoXuxemonUsuario->tamano = $xuxemon->tamano;
-                $nuevoXuxemonUsuario->evo1 = $xuxemon->evo1;
-                $nuevoXuxemonUsuario->evo2 = $xuxemon->evo2;
-                $nuevoXuxemonUsuario->save();
-
-                // Retornar la respuesta con éxito
-                return response()->json(['message' => 'Nuevo Xuxemon creado con éxito'], 200);
-            } else {
-                // Retornar un error si no se encontró un xuxemon aleatorio
-                return response()->json(['message' => 'No se pudo encontrar un xuxemon aleatorio'], 404);
+            // Si no exixte usuario retornara el error
+            if (!$xuxemonAleatorio) {
+                return response()->json(['message' => 'No se pudo encontrar Xuxemon', $xuxemonAleatorio], 404);
             }
+
+            // Crear el nuevo Xuxemon asociado al usuario
+            $nuevoXuxemonUsuario = new XuxemonsUser();
+            $nuevoXuxemonUsuario->xuxemon_id = $xuxemonAleatorio->id;
+            $nuevoXuxemonUsuario->user_id = $user->id;
+            $nuevoXuxemonUsuario->tamano = $xuxemonAleatorio->tamano;
+            $nuevoXuxemonUsuario->evo1 = $xuxemonAleatorio->evo1;
+            $nuevoXuxemonUsuario->evo2 = $xuxemonAleatorio->evo2;
+
+            $nuevoXuxemonUsuario->save();
+
+            // Retornar la respuesta con éxito
+            return response()->json(['message' => 'Nuevo Xuxemon creado con éxito'], 200);
+
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error al crear el nuevo Xuxemon: ' . $e->getMessage()], 500);
         }
@@ -77,7 +77,7 @@ class XuxemonsUserController extends Controller
         try {
 
             $user = User::where('remember_token', $userToken)
-            ->first();
+                ->first();
 
             if (!$user) {
                 // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
@@ -117,7 +117,7 @@ class XuxemonsUserController extends Controller
         try {
 
             $user = User::where('remember_token', $userToken)
-            ->first();
+                ->first();
 
             if (!$user) {
                 // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
@@ -159,22 +159,22 @@ class XuxemonsUserController extends Controller
         try {
 
             $user = User::where('remember_token', $userToken)
-            ->first();
+                ->first();
 
             if (!$user) {
                 // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
                 return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
             }
-            
+
             $xuxemonInfo = XuxemonsUser::where('user_id', $user->id)
                 ->where('xuxemon_id', $xuxemon_id)
                 ->first();
 
             $activar = 1;
 
-             if ($xuxemonInfo->activo == 1) {
-                 $activar = 0;
-             }
+            if ($xuxemonInfo->activo == 1) {
+                $activar = 0;
+            }
 
             if ($xuxemonInfo) {
                 $xuxemonInfo->activo = $activar;
@@ -200,7 +200,7 @@ class XuxemonsUserController extends Controller
         try {
 
             $user = User::where('remember_token', $userToken)
-            ->first();
+                ->first();
 
             if (!$user) {
                 // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
@@ -213,9 +213,9 @@ class XuxemonsUserController extends Controller
 
             $fav = 1;
 
-             if ($xuxemonInfo->favorito == 1) {
-                 $fav = 0;
-             }
+            if ($xuxemonInfo->favorito == 1) {
+                $fav = 0;
+            }
 
             if ($xuxemonInfo) {
                 $xuxemonInfo->favorito = $fav;
@@ -241,7 +241,7 @@ class XuxemonsUserController extends Controller
         try {
 
             $user = User::where('remember_token', $userToken)
-            ->first();
+                ->first();
 
             if (!$user) {
                 // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
@@ -273,8 +273,8 @@ class XuxemonsUserController extends Controller
             DB::transaction(function () use ($userToken, $xuxemon_id, $nuevaComida, $chuche_id) {
 
                 $user = User::where('remember_token', $userToken)
-                ->first();
-    
+                    ->first();
+
                 if (!$user) {
                     // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
                     return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);

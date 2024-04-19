@@ -52,7 +52,7 @@ export class EditarComponent {
    * Nombre: editarXuxemon
    * Función: para editar el Xuxemon
    */
-  editarXuxemon() {
+  editarXuxemon() {    
     this.xuxemonsService
       .XuxeUpdate(this.xuxemonForm.value, this.xuxeData.id)
       .subscribe({

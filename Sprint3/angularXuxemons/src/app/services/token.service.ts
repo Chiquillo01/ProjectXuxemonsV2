@@ -11,17 +11,18 @@ export class TokenService {
   constructor() { }
 
   private readonly TOKEN_KEY = 'auth_token';
+  private readonly Role_KEY = 'userRole';
 
   // Getters y Setters de la info del localStorage //
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY) || 'default';
   }
   getRole(): number | null {
-    return parseInt(localStorage.getItem('userRole') || '1');
+    return parseInt(localStorage.getItem(this.Role_KEY) || '1');
   }
   setToken(token: any): void {
     localStorage.setItem(this.TOKEN_KEY, token.access_token);
-    localStorage.setItem('userRole', token.rol);
+    localStorage.setItem(this.Role_KEY, token.rol);
   }
 
   // Funciones para eliminar el token y el rol del localStorage //
@@ -35,7 +36,7 @@ export class TokenService {
   }
   removeRole(): boolean {
     try {
-      localStorage.removeItem('userRole');
+      localStorage.removeItem(this.Role_KEY);
       return true;
     } catch (error) {
       return false;
