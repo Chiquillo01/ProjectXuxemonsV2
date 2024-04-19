@@ -108,16 +108,12 @@ export class XuxemonsService {
    * @returns la url de la api
    */
   confTamDef(tamano: any): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const body = {
+      newTamano: tamano
+    };
 
     return this.http.put(
-      `http://127.0.0.1:8000/api/xuxemons/tamano/${tamano.tamano}`,
-      {
-        headers,
-      }
+      'http://127.0.0.1:8000/api/xuxemons/tamano', body
     );
   }
 

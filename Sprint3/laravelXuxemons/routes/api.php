@@ -29,7 +29,7 @@ Route::post('/xuxemons/pc/random', [XuxemonsUserController::class, 'debug']);
 // Actualizar xuxemon //
 Route::put('/xuxemons/actualizar', [XuxemonsController::class, 'update']);
 // Actualizar tamaño por defecto del xuxemon //
-Route::put('/xuxemons/tamano/{tamano}', [XuxemonsController::class, 'updateTam']);
+Route::put('/xuxemons/tamano', [XuxemonsController::class, 'updateTam']);
 // Actualizar activo por defecto del xuxemon //
 Route::post('/xuxemons/{user_Id}/activo/{xuxemon_id}', [XuxemonsUserController::class, 'updateActivo']);
 // Actualizar favorito por defecto del xuxemon //

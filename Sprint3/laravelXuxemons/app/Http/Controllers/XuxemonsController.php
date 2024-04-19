@@ -117,9 +117,11 @@ class XuxemonsController extends Controller
      * Función: gracias al valor que se le pasa por paremetro hace un update
      * a la bd con el nuevo valor, esto lo hace a todos los registros
      */
-    public function updateTam(Request $request, $tamano)
+    public function updateTam(Request $request)
     {
         try {
+            $tamano = $request->input('newTamano.tamano');
+
             DB::transaction(function () use ($tamano) {
                 Xuxemons::query()->update(['tamano' => $tamano]);
             });
