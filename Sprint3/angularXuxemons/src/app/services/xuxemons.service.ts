@@ -52,8 +52,7 @@ export class XuxemonsService {
    */
   createXuxemon(xuxemonData: any): Observable<any> {
     return this.http.post<any>(
-      'http://127.0.0.1:8000/api/xuxemons/',
-      xuxemonData
+      'http://127.0.0.1:8000/api/xuxemons/', xuxemonData
     );
   }
 
@@ -63,8 +62,6 @@ export class XuxemonsService {
    * @returns la url de la api
    */
   createRandomXuxemon(userToken: string): Observable<any> {
-    console.log('Este es la segunda comprobación del usuario:' + userToken);
-
     const body = {
       token: userToken
     };
@@ -95,15 +92,14 @@ export class XuxemonsService {
    * Función: Función para actualizar datos del Xuxemon
    * @returns la url de la api
    */
-  XuxeUpdate(card: any, id: any): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+  XuxeUpdate(formDate: any, idXux: any): Observable<any> {
+    const body = {
+      xuxemonNewDate: formDate,
+      id_Xuxemon: idXux
+    };
 
-    return this.http.put(`http://127.0.0.1:8000/api/xuxemons/${id}`, card, {
-      headers,
-    });
+    return this.http.put('http://127.0.0.1:8000/api/xuxemons/actualizar', body
+    );
   }
 
   /**

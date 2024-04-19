@@ -107,14 +107,12 @@ export class CajaComponent implements OnInit {
     const userToken = this.tokenService.getToken();
 
     this.xuxemonsService.createRandomXuxemon(userToken!).subscribe({
-      next: (data) => {
-        console.log(data);
+      next: () => {
         alert('Xuxemon creardo con exito.');
         this.getXuxemons();
         
       },
-      error: (error) => {
-        console.error(error);
+      error: () => {
         alert('Xuxemon no se ha podido crear.');
       },
     });

@@ -27,7 +27,7 @@ Route::post('/xuxemons', [XuxemonsController::class, 'crearXuxemon']);
 // Crear xuxemon aleatorios //
 Route::post('/xuxemons/pc/random', [XuxemonsUserController::class, 'debug']);
 // Actualizar xuxemon //
-Route::put('/xuxemons/{xuxemons}', [XuxemonsController::class, 'update']);
+Route::put('/xuxemons/actualizar', [XuxemonsController::class, 'update']);
 // Actualizar tamaño por defecto del xuxemon //
 Route::put('/xuxemons/tamano/{tamano}', [XuxemonsController::class, 'updateTam']);
 // Actualizar activo por defecto del xuxemon //
