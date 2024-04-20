@@ -43,3 +43,6 @@ Thumbs.db
 
 # Angular cache folders
 /.angular/cache
+
+# Ignore Angular cache directory
+node_modules/.cache
