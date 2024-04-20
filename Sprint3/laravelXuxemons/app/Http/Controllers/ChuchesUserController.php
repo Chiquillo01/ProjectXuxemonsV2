@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// Imports //
+// Imports necesarios //
 use Carbon\Carbon;
 use App\Models\ChuchesUser;
 use App\Models\Chuches;
@@ -14,19 +14,21 @@ use Illuminate\Support\Facades\DB;
 class ChuchesUserController extends Controller
 {
     /**
-     * Nombre: obtenerXuxemonAleatorio
+     * Nombre: obtenerChucheAleatoria
      * Función: Obtener una chuche aleatoria de la tabla chuches.
      * @return \App\Models\Xuxemons|null
      */
     public static function obtenerChucheAleatoria()
     {
-        // Utiliza Eloquent para obtener una chuche aleatoria
         $chucheAleatoria = Chuches::inRandomOrder()->first();
-
-        // Retorna el id si se encuentra una chuche aleatoria, o null si no se encuentra ninguna
         return $chucheAleatoria ? $chucheAleatoria->id : null;
     }
 
+    /**
+     * Nombre: horario
+     * Función: 
+     * @return mixed
+     */
     public function horario(Request $request, $userToken)
     {
 
@@ -58,6 +60,11 @@ class ChuchesUserController extends Controller
         }
     }
 
+    /**
+     * Nombre: ReclamarHorario
+     * Función: 
+     * @return mixed
+     */
     public function ReclamarHorario(Request $request, $userToken)
     {
         $user = User::where('remember_token', $userToken)->first();
@@ -77,7 +84,7 @@ class ChuchesUserController extends Controller
         $horaActual = intval(Carbon::now()->format('H'));
 
         if ($horario) {
-         // if ($diaGuardado < $diaActual) {
+            // if ($diaGuardado < $diaActual) {
             if ($horaActual > 9 && $diaGuardado < $diaActual) {
                 $horario->debug = true;
                 $horario->save();
@@ -254,9 +261,11 @@ class ChuchesUserController extends Controller
         }
     }
 
-
-
-
+    /**
+     * Nombre: updateStack
+     * Función: 
+     * @return mixed
+     */
     function updateStack(Request $request, ChuchesUser $chuches)
     {
         try {

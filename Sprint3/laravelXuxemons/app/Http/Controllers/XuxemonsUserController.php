@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Imports //
 use App\Models\XuxemonsUser;
 use App\Models\ChuchesUser;
 use App\Models\User;
@@ -24,8 +23,10 @@ class XuxemonsUserController extends Controller
 
     /**
      * Nombre: debug
-     * Función: Crear un nuevo xuxemon aleatorio asociado al usuario en sesión.
-     * @param  \Illuminate\Http\Request  $request
+     * Función: Crear un nuevo xuxemon aleatorio asociado al usuario en sesión,
+     * usando el token que obtiene del body para saber el usuario. Aparte se crea
+     * el xuxemon aleatorio y lo guarda relacionando el id del xuxemon y el del user
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function debug(Request $request)
@@ -37,7 +38,6 @@ class XuxemonsUserController extends Controller
             // Busca el id del usuario autorizado
             $user = User::where('remember_token', $userToken)
                 ->first();
-
             // Si no exixte usuario retornara el error
             if (!$user) {
                 return response()->json(['message' => 'Usuario no encontrado', $user], 404);
@@ -60,9 +60,7 @@ class XuxemonsUserController extends Controller
 
             $nuevoXuxemonUsuario->save();
 
-            // Retornar la respuesta con éxito
             return response()->json(['message' => 'Nuevo Xuxemon creado con éxito'], 200);
-
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error al crear el nuevo Xuxemon: ' . $e->getMessage()], 500);
         }
@@ -71,6 +69,8 @@ class XuxemonsUserController extends Controller
     /**
      * Nombre: show
      * Función: Enviar los datos para que se muestren en el frontend
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $userToken)
     {
@@ -109,8 +109,10 @@ class XuxemonsUserController extends Controller
 
 
     /**
-     * Nombre: show
+     * Nombre: showActivos
      * Función: Enviar los datos para que se muestren en el frontend
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function showActivos(Request $request, $userToken)
     {
@@ -120,7 +122,6 @@ class XuxemonsUserController extends Controller
                 ->first();
 
             if (!$user) {
-                // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
                 return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
             }
 
@@ -147,23 +148,23 @@ class XuxemonsUserController extends Controller
     }
 
     /**
-     * Nombre: updateTam
-     * Función: gracias al valor que se le pasa por paremetro hace un update
-     * a la bd con el nuevo valor, esto lo hace a todos los registros
+     * Nombre: updateActivo
+     * Función: Gracias al valor que se le pasa por paremetro hace un update
+     * a la db con el nuevo valor, esto lo hace a todos los registros de esa tabla
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateActivo(Request $request, $userToken, $xuxemon_id)
+    public function updateActivo(Request $request)
     {
-        // $xuxemon_id = $request->input('xuxemon_id');
-        // $iduser = $request->input('user_id');
-
         try {
-
-            $user = User::where('remember_token', $userToken)
+            $xuxemon_id = $request->input('id_xuxemon');
+            $iduser = $request->input('tokenSesion');
+            $user = User::where('remember_token', $iduser)
                 ->first();
 
+            // Si no encuentra usuario //
             if (!$user) {
-                // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
-                return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
+                return response()->json(['message' => 'Usuario no encontrado', $user], 404);
             }
 
             $xuxemonInfo = XuxemonsUser::where('user_id', $user->id)
@@ -181,30 +182,30 @@ class XuxemonsUserController extends Controller
                 $xuxemonInfo->save();
             }
 
-            return response()->json(['message' => 'Ahora es un xuxemon activo' . $xuxemonInfo], 200);
+            return response()->json(['message' => 'Ahora es un xuxemon activo'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al hacer activo al xuxemon: ' . $e->getMessage() . '' . $xuxemonInfo], 500);
         }
     }
 
     /**
-     * Nombre: updateTam
-     * Función: gracias al valor que se le pasa por paremetro hace un update
-     * a la bd con el nuevo valor, esto lo hace a todos los registros
+     * Nombre: updateFav
+     * Función: Gracias al valor que se le pasa por paremetro hace un update
+     * a la db con el nuevo valor, esto lo hace a todos los registros de la tabla
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function updateFav(Request $request, $userToken, $xuxemon_id)
+    public function updateFav(Request $request)
     {
-        // $xuxemon_id = $request->input('xuxemon_id');
-        // $iduser = $request->input('user_id');
+        $xuxemon_id = $request->input('xuxemon_id');
+        $iduser = $request->input('userToken');
 
         try {
-
-            $user = User::where('remember_token', $userToken)
+            $user = User::where('remember_token', $iduser)
                 ->first();
 
             if (!$user) {
-                // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
-                return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
+                return response()->json(['message' => 'Usuario no encontrado', $user], 404);
             }
 
             $xuxemonInfo = XuxemonsUser::where('user_id', $user->id)
@@ -234,6 +235,8 @@ class XuxemonsUserController extends Controller
      * Función: Primero recoje los valores necesarios, seguidamente suma y 
      * agrega el nuevo valor de comida al xuxemon y ha su vez elimina la xuxe usada.
      * Por último comprovaciones para ver si el Xuxemon puede evolucionar
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
 
     public function alimentar(Request $request, $xuxemon_id, $chuche_id, $userToken)
@@ -317,16 +320,28 @@ class XuxemonsUserController extends Controller
     /**
      * Nombre: evolucionarXuxemon
      * Función: 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function evolucionarXuxemon(Request $request, $user_Id, $xuxemon_id)
+    public function evolucionarXuxemon(Request $request)
     {
         try {
+            $userToken = $request->input('userToken');
+            $xuxemon_id = $request->input('xuxemonId');
             $cumpleEvo1 = $request->input('cumpleEvo1');
 
+            $user = User::where('remember_token', $userToken)
+                ->first();
+
+            if (!$user) {
+                // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
+                return response()->json(['message' => 'Usuario no encontrado', $user], 404);
+            }
+
             if ($cumpleEvo1) {
-                DB::transaction(function () use ($user_Id, $xuxemon_id) {
+                DB::transaction(function () use ($user, $xuxemon_id) {
                     // Actualizar el valor de comida en la tabla xuxemons_users dentro de la transacción
-                    XuxemonsUser::where('user_id', $user_Id)
+                    XuxemonsUser::where('user_id', $user)
                         ->where('xuxemon_id', $xuxemon_id)
                         ->join('xuxemons', 'xuxemons_users.xuxemon_id', '=', 'xuxemons.id')
                         ->update(['xuxemons.tamano' => 'mediano']);
@@ -341,16 +356,28 @@ class XuxemonsUserController extends Controller
     /**
      * Nombre: evolucionarXuxemon
      * Función: 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function evolucionarXuxemon2(Request $request, $user_Id, $xuxemon_id)
+    public function evolucionarXuxemon2(Request $request)
     {
         try {
+            $userToken = $request->input('userToken');
+            $xuxemon_id = $request->input('xuxemonId');
             $cumpleEvo2 = $request->input('cumpleEvo2');
 
+            $user = User::where('remember_token', $userToken)
+                ->first();
+
+            if (!$user) {
+                // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
+                return response()->json(['message' => 'Usuario no encontrado', $user], 404);
+            }
+
             if ($cumpleEvo2) {
-                DB::transaction(function () use ($user_Id, $xuxemon_id) {
+                DB::transaction(function () use ($user, $xuxemon_id) {
                     // Actualizar el valor de comida en la tabla xuxemons_users dentro de la transacción
-                    XuxemonsUser::where('user_id', $user_Id)
+                    XuxemonsUser::where('user_id', $user)
                         ->where('xuxemon_id', $xuxemon_id)
                         ->join('xuxemons', 'xuxemons_users.xuxemon_id', '=', 'xuxemons.id')
                         ->update(['xuxemons.tamano' => 'grande']);

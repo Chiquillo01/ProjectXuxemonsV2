@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Imports //
 use App\Models\Xuxemons;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,14 +9,16 @@ use Illuminate\Support\Facades\DB;
 class XuxemonsController extends Controller
 {
     /**
-     * Nombre: store
+     * Nombre: crearXuxemon
      * Función: se encarga de crear los nuevos xuxemons, para ello valida los datos recibidos 
      * y crea el nuevo xuxemon a traves de una transacción
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function crearXuxemon(Request $request)
     {
         try {
-            // Valida los datos //
+            // Valida los datos pasados en el body del servicio //
             $validados = $request->validate([
                 'nombre' => 'required|string',
                 'tipo' => 'required|string',
@@ -28,7 +29,6 @@ class XuxemonsController extends Controller
                 Xuxemons::create($validados);
             });
 
-            // Devuelve un 200 (OK) para confirmar al usuario //
             return response()->json(['message' => 'Xuxemon creado con exito'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al crear el Xuxemon: ' . $e->getMessage()], 500);
@@ -37,26 +37,30 @@ class XuxemonsController extends Controller
 
     /**
      * Nombre: show
-     * Función: Recoje todos los xuxemons de la bd y se los pasa al servicio de angular
+     * Función: Recoje todos los xuxemons de la db y se los pasa al 
+     * servicio de angular que lo llama
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Xuxemons $xuxemons)
     {
         try {
-            // Selecciona todos los xuxemons
             $xuxemons = Xuxemons::all();
-            // Retorna todos los xuxemons en forma json
+
             return response()->json([$xuxemons, 200]);
         } catch (\Exception $e) {
-            // Retorna error con el mensaje de error
             return response()->json(['message' => 'Ha ocurrido un error al retornar los xuxemons: ' . $e->getMessage()], 500);
         }
     }
 
     /**
      * Nombre: update
-     * Función: se encarga de actualizar los nuevos valores, para ello valida los datos recibidos 
+     * Función: se encarga de actualizar los nuevos valores, para ello recoje los datos
+     * valida los datos recibidos 
      * y crea el update de losdatos xuxemon a traves de una transacción. Sabe el xuxemon a actualizar 
      * gracias al paremetro extra que le llega por la api
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request)
     {
@@ -72,17 +76,17 @@ class XuxemonsController extends Controller
             ]);
 
             // Hace el update dentro de una transaccion
-        DB::transaction(function () use ($validados, $id_Xuxemon) {
-            // Busca el Xuxemon por su ID
-            $xuxemon = Xuxemons::findOrFail($id_Xuxemon);
+            DB::transaction(function () use ($validados, $id_Xuxemon) {
+                // Busca el Xuxemon por su ID
+                $xuxemon = Xuxemons::findOrFail($id_Xuxemon);
 
-            // Actualiza el Xuxemon con los datos validados
-            $xuxemon->update([
-                'nombre' => $validados['xuxemonNewDate']['nombre'],
-                'tipo' => $validados['xuxemonNewDate']['tipo'],
-                'archivo' => $validados['xuxemonNewDate']['archivo'],
-            ]);
-        });
+                // Actualiza el Xuxemon con los datos validados
+                $xuxemon->update([
+                    'nombre' => $validados['xuxemonNewDate']['nombre'],
+                    'tipo' => $validados['xuxemonNewDate']['tipo'],
+                    'archivo' => $validados['xuxemonNewDate']['archivo'],
+                ]);
+            });
 
             // Retorna actualizado de forma satisfactoria
             return response()->json(['message' => 'Se ha actualizado de forma correcta'], 200);
@@ -94,6 +98,8 @@ class XuxemonsController extends Controller
     /**
      * Nombre: destroy
      * Función: elimina al xuxemon que le llega como parametro
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Xuxemons $xuxemons)
     {
@@ -116,6 +122,8 @@ class XuxemonsController extends Controller
      * Nombre: updateTam
      * Función: gracias al valor que se le pasa por paremetro hace un update
      * a la bd con el nuevo valor, esto lo hace a todos los registros
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function updateTam(Request $request)
     {
@@ -136,6 +144,8 @@ class XuxemonsController extends Controller
      * Nombre: updateEvo1
      * Función: gracias al valor que se le pasa por paremetro hace un update
      * a la bd con el nuevo valor, esto lo hace a todos los registros
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function updateEvo1(Request $request, $evo1)
     {
@@ -153,6 +163,8 @@ class XuxemonsController extends Controller
      * Nombre: updateEvo2
      * Función: gracias al valor que se le pasa por paremetro hace un update
      * a la bd con el nuevo valor, esto lo hace a todos los registros
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function updateEvo2(Request $request, $evo2)
     {

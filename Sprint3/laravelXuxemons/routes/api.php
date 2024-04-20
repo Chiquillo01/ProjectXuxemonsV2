@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 // Controladores //
 use \App\Http\Controllers\Controller;
@@ -8,39 +7,20 @@ use \App\Http\Controllers\XuxemonsController;
 use \App\Http\Controllers\XuxemonsUserController;
 use App\Http\Controllers\ChuchesUserController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-//Route::middleware('cors')->group(function () {
-//Route::middleware('auth:sanctum')->group(function () {
 // Rutas para los Xuxemons // 
-// Crear xuxemon //
+// Creación de Xuxemons //
 Route::post('/xuxemons', [XuxemonsController::class, 'crearXuxemon']);
-// Crear xuxemon aleatorios //
 Route::post('/xuxemons/pc/random', [XuxemonsUserController::class, 'debug']);
-// Actualizar xuxemon //
+// Actualización de Xuxemon //
 Route::put('/xuxemons/actualizar', [XuxemonsController::class, 'update']);
-// Actualizar tamaño por defecto del xuxemon //
+Route::post('/xuxemons/activo', [XuxemonsUserController::class, 'updateActivo']);
+Route::post('/xuxemons/favorito', [XuxemonsUserController::class, 'updateFav']);
+// Actualizar tamaño para la evolución por defecto ( uso del administrador) //
+Route::put('/xuxemons/evolucionar', [XuxemonsUserController::class, 'evolucionarXuxemon']);
+Route::put('/xuxemons/evolucionar2', [XuxemonsUserController::class, 'evolucionarXuxemon2']);
+// Actualizar configuraciones del administrador //
 Route::put('/xuxemons/tamano', [XuxemonsController::class, 'updateTam']);
-// Actualizar activo por defecto del xuxemon //
-Route::post('/xuxemons/{user_Id}/activo/{xuxemon_id}', [XuxemonsUserController::class, 'updateActivo']);
-// Actualizar favorito por defecto del xuxemon //
-Route::post('/xuxemons/{user_Id}/favorito/{xuxemon_id}', [XuxemonsUserController::class, 'updateFav']);
-// Actualizar tamaño para la evolución por defecto ( uso del administrador) //
-Route::put('/xuxemons/{user_Id}/evolucionar/{xuxemonId}', [XuxemonsUserController::class, 'evolucionarXuxemon']);
-// Actualizar tamaño para la evolución por defecto ( uso del administrador) //
-Route::put('/xuxemons/{user_Id}/evolucionar2/{xuxemonId}', [XuxemonsUserController::class, 'evolucionarXuxemon2']);
-// Actualizar evoluciones xuxemon //
 Route::put('/xuxemons/evos/{evo1}', [XuxemonsController::class, 'updateEvo1']);
-// Actualizar evoluciones xuxemon //
 Route::put('/xuxemons/evos2/{evo2}', [XuxemonsController::class, 'updateEvo2']);
 // Actualizar alimentos xuxemon usuario //
 Route::put('/xuxemons/{xuxemon_id}/alimentar/{chuche_id}/user/{user_Id}', [XuxemonsUserController::class, 'alimentar']);
@@ -65,11 +45,11 @@ Route::post('/chuches/horario/{userId}', [ChuchesUserController::class, 'horario
 Route::post('/chuches/random/{userId}', [ChuchesUserController::class, 'debug']);
 // Mostrar todas las xuxes del usuario //
 Route::get('/chuchesUser/{userId}', [ChuchesUserController::class, 'show']);
-//});
+// ---------------------- //
+// ---------------------- //
 
 // Rutas del usuario Usuario // 
-// Registar //
 Route::post('/register', [Controller::class, 'register']);
-// Loguearse //
 Route::post('/login', [Controller::class, 'login']);
+// ---------------------- //
 // ---------------------- //

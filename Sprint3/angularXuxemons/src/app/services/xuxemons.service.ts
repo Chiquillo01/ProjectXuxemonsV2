@@ -14,7 +14,7 @@ export class XuxemonsService {
   /**
    * Nombre: getAllXuxemons
    * Función: Realizar la solicitud HTTP GET para obtener todos los Xuxemons
-   * @returns la url de la api
+   * @returns Un observable que emite un arreglo de Xuxemons
    */
   getAllXuxemons(): Observable<Xuxemons[]> {
     return this.http.get<Xuxemons[]>('http://127.0.0.1:8000/api/xuxemons/');
@@ -22,8 +22,8 @@ export class XuxemonsService {
 
   /**
    * Nombre: getAllXuxemonsUser
-   * Función: Obtener todos los Xuxemons que tiene un usuario
-   * @returns la url de la api
+   * Función: Realizar la solicitud HTTP GET para obtener todos los XuxemonsUsers
+   * @returns Un observable que emite un arreglo de XuxemonsUsers
    */
   getAllXuxemonsUser(userToken: string): Observable<XuxemonsUsers[]> {
     return this.http.get<XuxemonsUsers[]>(
@@ -32,9 +32,10 @@ export class XuxemonsService {
   }
 
   /**
-   * Nombre: getAllXuxemonsUser
-   * Función: Obtener todos los Xuxemons activos que tiene un usuario
-   * @returns la url de la api
+   * Nombre: getAllXuxemonsUserActivos
+   * Función: Realizar la solicitud HTTP GET para obtener todos los XuxemonsUsers
+   * que estan activos
+   * @returns Un observable que emite un arreglo de XuxemonsUsers
    */
   getAllXuxemonsUserActivos(userToken: string): Observable<XuxemonsUsers[]> {
     // const body={
@@ -47,8 +48,8 @@ export class XuxemonsService {
 
   /**
    * Nombre: createXuxemon
-   * Función: Crear un nuevo xuxemon
-   * @returns la url de la api
+   * Función: Envia los valores necesarios a la api para crear el nuevo xuxemon
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   createXuxemon(xuxemonData: any): Observable<any> {
     return this.http.post<any>(
@@ -179,66 +180,73 @@ export class XuxemonsService {
 
   /**
    * Nombre: xuxemonActivo
-   * Función: Función para actualizar el nivel evolutivo por defecto del juego
+   * Función: Función para actualizar si el pokemon esta en activo o no
    * @returns la url de la api
    */
   xuxemonActivo(userToken: string, xuxemon_id: number): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const body = {
+      id_xuxemon: xuxemon_id,
+      tokenSesion: userToken,
+    };
 
     return this.http.post<any>(
-      `http://127.0.0.1:8000/api/xuxemons/${userToken}/activo/${xuxemon_id}`,
-      headers
+      'http://127.0.0.1:8000/api/xuxemons/activo', body
     );
   }
 
-
   /**
- * Nombre: xuxemonActivo
- * Función: Función para actualizar el nivel evolutivo por defecto del juego
- * @returns la url de la api
+ * Nombre: xuxemonFav
+ * Función: 
+ * @returns Un observable que emite la respuesta de la solicitud HTTP.
  */
   xuxemonFav(userToken: string, xuxemon_id: number): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const body = {
+      userToken: userToken,
+      xuxemon_id: xuxemon_id
+    };
 
     return this.http.post<any>(
-      `http://127.0.0.1:8000/api/xuxemons/${userToken}/favorito/${xuxemon_id}`,
-      headers
+      'http://127.0.0.1:8000/api/xuxemons/favorito', body
     );
   }
 
   /**
-   * Nombre: xuxemonActivo
-   * Función: Función para actualizar el nivel evolutivo por defecto del juego
-   * @returns la url de la api
+   * Nombre: evolucionarXuxemon
+   * Función: uncion para enviar los datos necesarios para saber si el xuxemon 
+   * es capaz de evolucionar
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   evolucionarXuxemon(xuxemonId: number, cumpleEvo1: boolean): Observable<any> {
-    const userToken = this.tokenService.getRole();
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const userToken = this.tokenService.getToken();
+    const body = {
+      userToken: userToken,
+      xuxemonId: xuxemonId,
+      cumpleEvo1: cumpleEvo1
+    };
 
     return this.http.put(
-      `http://127.0.0.1:8000/api/xuxemons/${userToken}/evolucionar/${xuxemonId}`,
-      { cumpleEvo1, headers }
+      'http://127.0.0.1:8000/api/xuxemons/evolucionar', body
     );
   }
+
+  /**
+   * Nombre: evolucionarXuxemon2
+   * Función: uncion para enviar los datos necesarios para saber si el xuxemon 
+   * es capaz de evolucionar por segunda vez
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
+   */
   evolucionarXuxemon2(xuxemonId: number, cumpleEvo2: boolean): Observable<any> {
     const userToken = this.tokenService.getRole();
     const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const body = {
+      userToken: userToken,
+      authToken: authToken,
+      xuxemonId: xuxemonId,
+      cumpleEvo2: cumpleEvo2
+    };
 
     return this.http.put(
-      `http://127.0.0.1:8000/api/xuxemons/${userToken}/evolucionar2/${xuxemonId}`,
-      { cumpleEvo2, headers }
+      'http://127.0.0.1:8000/api/xuxemons/evolucionar2', body
     );
   }
 }

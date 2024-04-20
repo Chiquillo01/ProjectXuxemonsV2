@@ -46,33 +46,37 @@ export class AlimentarComponent {
 
   /**
    * Nombre: alimentarXuxemon
-   * Función: para editar el Xuxemon
+   * Función: envia los parametros necesarios para ejecutar la evolución
+   * @param newAlimentData
    */
   alimentarXuxemon(newAlimentData: number) {
     const newXuxeData = parseInt(this.xuxeData.id);
     // const newAlimentData = parseInt(this.alimentForm.value['chucheSeleccionada']);
 
-    this.xuxemonsService
-      .alimentar(newXuxeData, newAlimentData)
-      .subscribe({
-        next: (returns) => {
-          console.log('Este sale por el next: ' + returns);
-          this.cumpleEvo1 = returns.cumpleEvo1;
-          this.cumpleEvo2 = returns.cumpleEvo2;
-          // alert('Le ha gustado el alimento.');
-          console.log('Este es el de evo 1: ' +returns.cumpleEvo1);
-          console.log('Este es el de evo 2: ' +returns.cumpleEvo2);
-          this.getChuches();
-          // this.ngOnInit();
-        },
-        error: (error) => {
-          console.log('Esta saliendo por el erros: ' + error);
-          // alert('No quiere tu mierda de chuche.');
-          // throw new Error(error);
-        },
-      });
+    this.xuxemonsService.alimentar(newXuxeData, newAlimentData).subscribe({
+      next: (returns) => {
+        console.log('Este sale por el next: ' + returns);
+        this.cumpleEvo1 = returns.cumpleEvo1;
+        this.cumpleEvo2 = returns.cumpleEvo2;
+        // alert('Le ha gustado el alimento.');
+        console.log('Este es el de evo 1: ' + returns.cumpleEvo1);
+        console.log('Este es el de evo 2: ' + returns.cumpleEvo2);
+        this.getChuches();
+        // this.ngOnInit();
+      },
+      error: (error) => {
+        console.log('Esta saliendo por el erros: ' + error);
+        // alert('No quiere tu mierda de chuche.');
+        // throw new Error(error);
+      },
+    });
   }
 
+  /**
+   * Nombre: alimentarXuxemon
+   * Función: para editar el Xuxemon
+   * @param xuxeUser
+   */
   accionCumpleEvo1() {
     const newXuxeData = parseInt(this.xuxeData.id);
 
@@ -93,6 +97,11 @@ export class AlimentarComponent {
       });
   }
 
+  /**
+   * Nombre: alimentarXuxemon
+   * Función: para editar el Xuxemon
+   * @param xuxeUser
+   */
   accionCumpleEvo2() {
     const newXuxeData = parseInt(this.xuxeData.id);
 
@@ -112,8 +121,8 @@ export class AlimentarComponent {
   }
 
   /**
-   * Nombre: getChuches
-   * Función: obtiene todas las chuches que son del usuario que esta en sessión
+   * Nombre: alimentarXuxemon
+   * Función: para editar el Xuxemon
    */
   getChuches() {
     const userToken = this.tokenService.getToken();
@@ -132,6 +141,12 @@ export class AlimentarComponent {
     }
   }
 
+  /**
+   * Nombre: getImageStyle
+   * Función: 
+   * @param tamano
+   * @returns width
+   */
   getImageStyle(tamano: string): any {
     let width: number;
     const paqueno = 50;

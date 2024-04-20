@@ -29,7 +29,7 @@ export class CajaComponent implements OnInit {
    * Nombre: getImageStyle
    * Función: Modificar el tamaño de la imagen segun el tamaño del xuxemon
    * @param tamano
-   * @returns
+   * @returns width
    */
   getImageStyle(tamano: string): any {
     let width: number;
@@ -118,21 +118,20 @@ export class CajaComponent implements OnInit {
     });
   }
 
+  /**
+   * Nombre: activo
+   * Función: crea aleatoriamente un Xuxemon pasandole el id del usuario de la sesión habierta.
+   * Despues actualizara la lista de Xuxemons del Usuario
+   */
   activo(xuxeUser: any) {
     const userToken = this.tokenService.getToken();
     const xuxemon_id = xuxeUser.xuxemon_id;
     const ContadorActivo = this.xuxemonsUserActivos.length;
-    console.log(xuxeUser);
-    console.log('Id xuxemon: ' + xuxemon_id);
-    console.log('Token user: ' + userToken);
-
 
     if (ContadorActivo < 4 || xuxeUser.activo == 1) {
-      console.log(ContadorActivo);
       this.xuxemonsService.xuxemonActivo(userToken!, xuxemon_id).subscribe({
-        next: (returns) => {
-          console.log('Este sale por el next: ' + returns);
-          // alert('Le ha gustado el alimento.');
+        next: () => {
+          alert('Se va al activo.');
           this.getXuxemonsActivos();
           this.getXuxemons();
           if(xuxeUser.activo == 0){
@@ -143,31 +142,32 @@ export class CajaComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.log('Esta saliendo por el error: ' + error);
-          // alert('No quiere tu mierda de chuche.');
-          // throw new Error(error);
+          alert('No quiere ser activo');
+          throw new Error(error);
         },
       });
     }
   }
 
+  /**
+   * Nombre: favorito
+   * Función: Envia los valores necesarios para añadir o quitar al xuxemon 
+   * seleccionado como favorito
+   * @param xuxeUser
+   */
   favorito(xuxeUser: any) {
     const userToken = this.tokenService.getToken();
     const xuxemon_id = xuxeUser.xuxemon_id;
-    console.log(xuxeUser);
-    console.log('Id xuxemon: ' + xuxemon_id);
-    console.log('Token user: ' + userToken);
+
     this.xuxemonsService.xuxemonFav(userToken!, xuxemon_id).subscribe({
-      next: (returns) => {
-        console.log('Este sale por el next: ' + returns);
-        // alert('Le ha gustado el alimento.');
+      next: () => {
+        alert('Se ha podido modificar');
         this.getXuxemonsActivos();
         this.getXuxemons();
       },
       error: (error) => {
-        console.log('Esta saliendo por el error: ' + error);
-        // alert('No quiere tu mierda de chuche.');
-        // throw new Error(error);
+        alert('No quiere tu mierda de chuche.');
+        throw new Error(error);
       },
     });
   }

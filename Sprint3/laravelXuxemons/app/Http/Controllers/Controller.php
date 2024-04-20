@@ -19,14 +19,15 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 
     /**
-     * Registro de los usuarios
-     *
+     * Nombre: register
+     * Función: Primeramente empieza con una transacción, luego valida los datos introducidos 
+     * en el body, retoca el rol para poder introducir de forma corecta el valor y finalmente
+     * crea al usuario y lo introduce en la db
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request)
     {
-
         // Inicia la transaccion //
         DB::beginTransaction();
 
@@ -53,21 +54,16 @@ class Controller extends BaseController
             // Guarda la información en la bd //
             DB::commit();
 
-            // Devuelve un 200 (OK) para confirmar al usuario //
             return response()->json(['message' => 'Usuario registrado correctamente'], 200);
         } catch (\Exception $e) {
-
-            // Si hay algun fallo, hace un rollback //
             DB::rollBack();
-
-            // Devuelve un mensaje de error //
             return response()->json(['message' => 'Ha ocurrido un error al registrar el usuario: ' . $e->getMessage()], 500);
         }
     }
 
     /**
-     * Login de los usuarios
-     *
+     * Nombre: login
+     * Función: Valida los datos del body e intenta hacer el inicio de sesión
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -98,11 +94,9 @@ class Controller extends BaseController
                     'rol' => $rol,
                 ], 200);
             } else {
-                // Si no, deuvelve credenciales incorrectas //
                 return response()->json(['message' => 'Credenciales incorrectas'], 401);
             }
         } catch (\Exception $e) {
-            // Si existe algun error, se muestras //
             return response()->json(['message' => 'Ha ocurrido un error al hacer login: ' . $e->getMessage()], 500);
         }
     }
