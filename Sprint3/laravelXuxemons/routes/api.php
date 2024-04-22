@@ -36,6 +36,8 @@ Route::get('/xuxemonsUserActivos/{userId}', [XuxemonsUserController::class, 'sho
 // ---------------------- //
 // ---------------------- //
 
+Route::get('/curas', [ChuchesUserController::class, 'showCuras']);
+
 // Rutas para las chuches //
 Route::put('/activar/horario/{userId}', [ChuchesUserController::class, 'ReclamarHorario']);
 Route::get('/horario/show/{userId}', [ChuchesUserController::class, 'showHorario']);
