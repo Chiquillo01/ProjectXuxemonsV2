@@ -147,14 +147,16 @@ class XuxemonsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateEvo1(Request $request, $evo1)
+    public function updateEvo1(Request $request)
     {
         try {
-            DB::transaction(function () use ($evo1) {
-                Xuxemons::query()->update(['evo1' => $evo1]);
+            $evolucion = $request->input('evolucion.evo1');
+
+            DB::transaction(function () use ($evolucion) {
+                Xuxemons::query()->update(['evo1' => $evolucion]);
             });
 
-            return response()->json(['message' => 'Se ha actualizado el tamaño de los xuxemons correctamente'], 200);
+            return response()->json([$evolucion], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al actualizar los xuxemons: ' . $e->getMessage()], 500);
         }
@@ -166,14 +168,16 @@ class XuxemonsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateEvo2(Request $request, $evo2)
+    public function updateEvo2(Request $request)
     {
         try {
-            DB::transaction(function () use ($evo2) {
-                Xuxemons::query()->update(['evo2' => $evo2]);
+            $evolucion = $request->input('evolucion.evo2');
+
+            DB::transaction(function () use ($evolucion) {
+                Xuxemons::query()->update(['evo2' => $evolucion]);
             });
 
-            return response()->json(['message' => 'Se ha actualizado el tamaño de los xuxemons correctamente'], 200);
+            return response()->json([$evolucion], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al actualizar los xuxemons: ' . $e->getMessage()], 500);
         }
