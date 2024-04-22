@@ -23,6 +23,17 @@ export class ChuchesService {
   }
 
   /**
+   * Nombre: getAllCuras
+   * Función: Obtener todas las curas que tienes
+   * @returns la url de la api
+   */
+  getAllCuras(): Observable<ChuchesUser[]> {
+    return this.http.get<ChuchesUser[]>(
+      `http://127.0.0.1:8000/api/curas`
+    );
+  }
+
+  /**
    * Nombre: getHorario
    * Función: Obtener todas las chuches que tiene un usuario
    * @returns la url de la api

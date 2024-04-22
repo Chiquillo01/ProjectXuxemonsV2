@@ -8,6 +8,7 @@ use App\Models\ChuchesUser;
 use App\Models\Chuches;
 use App\Models\User;
 use App\Models\Horario;
+use App\Models\Curas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -222,6 +223,23 @@ class ChuchesUserController extends Controller
 
             // Retorna todos los xuxemons en forma json
             return response()->json([$chuches, 200]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Ha ocurrido un error al retornar las chuches: ' . $e->getMessage()], 500);
+        }
+    }
+
+        /**
+     * Nombre: show
+     * Función: Enviar los datos para que se muestren en el frontend
+     */
+    public function showCuras(Request $request)
+    {
+        try {
+            // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
+            $curas = Curas::all();
+
+            // Retorna todos los xuxemons en forma json
+            return response()->json([$curas, 200]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al retornar las chuches: ' . $e->getMessage()], 500);
         }
