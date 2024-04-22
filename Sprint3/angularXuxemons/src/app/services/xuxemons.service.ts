@@ -60,7 +60,7 @@ export class XuxemonsService {
   /**
    * Nombre: createRandomXuxemon
    * Función: Crear un nuevo xuxemon al pc del usuario que esta la sesión
-   * @returns la url de la api
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   createRandomXuxemon(userToken: string): Observable<any> {
     const body = {
@@ -75,7 +75,7 @@ export class XuxemonsService {
   /**
    * Nombre: XuxeDelete
    * Función: Función para eliminar un xuxemon de la bd
-   * @returns la url de la api
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   XuxeDelete(id: any): Observable<any> {
     const authToken = this.tokenService.getToken();
@@ -91,7 +91,7 @@ export class XuxemonsService {
   /**
    * Nombre: XuxeUpdate
    * Función: Función para actualizar datos del Xuxemon
-   * @returns la url de la api
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   XuxeUpdate(formDate: any, idXux: any): Observable<any> {
     const body = {
@@ -106,7 +106,7 @@ export class XuxemonsService {
   /**
    * Nombre: XuxeUpdate
    * Función: Función para actualizar el tamaño por defecto del juego
-   * @returns la url de la api
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   confTamDef(tamano: any): Observable<any> {
     const body = {
@@ -119,47 +119,37 @@ export class XuxemonsService {
   }
 
   /**
-   * Nombre: XuxeUpdate
-   * Función: Función para actualizar el nivel evolutivo por defecto del juego
-   * @returns la url de la api
+   * Nombre: confEvo
+   * Función: 
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   confEvo(evo: any): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const body = {
+      evolucion: evo,
+    };
 
-    return this.http.put(
-      `http://127.0.0.1:8000/api/xuxemons/evos/${evo.evo1}`,
-      {
-        headers,
-      }
+    return this.http.put('http://127.0.0.1:8000/api/xuxemons/evos', body,
     );
   }
 
   /**
    * Nombre: XuxeUpdate
    * Función: Función para actualizar el nivel evolutivo por defecto del juego
-   * @returns la url de la api
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   confEvo2(evo: any): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const body = {
+      evolucion: evo,
+    };
 
-    return this.http.put(
-      `http://127.0.0.1:8000/api/xuxemons/evos2/${evo.evo2}`,
-      {
-        headers,
-      }
+    return this.http.put('http://127.0.0.1:8000/api/xuxemons/evos2', body
     );
   }
 
   /**
    * Nombre: alimentar
    * Función: Función para actualizar el nivel evolutivo por defecto del juego
-   * @returns la url de la api
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   alimentar(xuxemon_id: number, chuche_id: number): Observable<any> {
     const userToken = this.tokenService.getToken();
@@ -181,7 +171,7 @@ export class XuxemonsService {
   /**
    * Nombre: xuxemonActivo
    * Función: Función para actualizar si el pokemon esta en activo o no
-   * @returns la url de la api
+   * @returns Un observable que emite la respuesta de la solicitud HTTP.
    */
   xuxemonActivo(userToken: string, xuxemon_id: number): Observable<any> {
     const body = {

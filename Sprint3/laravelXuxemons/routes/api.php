@@ -20,8 +20,8 @@ Route::put('/xuxemons/evolucionar', [XuxemonsUserController::class, 'evolucionar
 Route::put('/xuxemons/evolucionar2', [XuxemonsUserController::class, 'evolucionarXuxemon2']);
 // Actualizar configuraciones del administrador //
 Route::put('/xuxemons/tamano', [XuxemonsController::class, 'updateTam']);
-Route::put('/xuxemons/evos/{evo1}', [XuxemonsController::class, 'updateEvo1']);
-Route::put('/xuxemons/evos2/{evo2}', [XuxemonsController::class, 'updateEvo2']);
+Route::put('/xuxemons/evos', [XuxemonsController::class, 'updateEvo1']);
+Route::put('/xuxemons/evos2', [XuxemonsController::class, 'updateEvo2']);
 // Actualizar alimentos xuxemon usuario //
 Route::put('/xuxemons/{xuxemon_id}/alimentar/{chuche_id}/user/{user_Id}', [XuxemonsUserController::class, 'alimentar']);
 // Route::put('/xuxemons/alimentar/user', [XuxemonsUserController::class, 'alimentar']);
