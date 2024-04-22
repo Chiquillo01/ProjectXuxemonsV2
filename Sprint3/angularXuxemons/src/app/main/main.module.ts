@@ -18,6 +18,7 @@ import { EditarComponent } from './xuxemons/xuxedex/editar/editar.component';
 import { CajaComponent } from './xuxemons/caja/caja.component';
 import { AlimentarComponent } from './xuxemons/caja/alimentar/alimentar.component';
 import { ObjetosComponent } from './inventario/objetos/objetos.component';
+import { CurarComponent } from './inventario/objetos/curar/curar/curar.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
       { path: 'home/inventario', component: InventarioComponent },
       { path: 'home/inventario/chuches', component: ChuchesComponent },
       { path: 'home/inventario/objetos', component: ObjetosComponent },
+      { path: 'home/inventario/objetos/curar', component: CurarComponent },
       { path: 'home/tienda', component: TiendaComponent },
       { path: 'home/xuxemons', component: XuxemonsComponent },
       { path: 'home/xuxemons/xuxedex', component: XuxedexComponent },
@@ -57,6 +59,7 @@ const routes: Routes = [
     CajaComponent,
     ConfigComponent,
     AlimentarComponent,
+    CurarComponent,
   ],
 })
 export class MainModule {}
