@@ -23,7 +23,7 @@ Route::put('/xuxemons/tamano', [XuxemonsController::class, 'updateTam']);
 Route::put('/xuxemons/evos', [XuxemonsController::class, 'updateEvo1']);
 Route::put('/xuxemons/evos2', [XuxemonsController::class, 'updateEvo2']);
 // Actualizar alimentos xuxemon usuario //
-Route::put('/xuxemons/{xuxemon_id}/alimentar/{chuche_id}/user/{user_Id}', [XuxemonsUserController::class, 'alimentar']);
+Route::put('/xuxemons/alimentar/user', [XuxemonsUserController::class, 'alimentar']);
 // Route::put('/xuxemons/alimentar/user', [XuxemonsUserController::class, 'alimentar']);
 // Eliminar un xuxemon //
 Route::delete('/xuxemons/{xuxemons}', [XuxemonsController::class, 'destroy']);

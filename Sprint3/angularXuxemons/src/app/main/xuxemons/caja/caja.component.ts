@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 // Imports extras //
 import { TokenService } from '../../../services/token.service';
 import { XuxemonsService } from '../../../services/xuxemons.service';
@@ -17,7 +17,8 @@ export class CajaComponent implements OnInit {
   constructor(
     private tokenService: TokenService,
     private xuxemonsService: XuxemonsService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -186,10 +187,11 @@ export class CajaComponent implements OnInit {
         tamano: xuxeUser.tamano,
       },
     };
-    this.router.navigate(
-      ['/home/home/xuxemons/caja/alimentar'],
-      navigationExtras
-    );
+
+    this.router.navigate(['alimentar'], navigationExtras);
+
+    //navigationExtras);
+      
   }
 
   /**

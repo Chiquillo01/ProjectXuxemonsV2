@@ -24,21 +24,20 @@ const routes: Routes = [
     path: '',
     component: MainComponent,
     children: [
-      { path: 'footer', component: FooterComponent },
-      { path: 'header', component: HeaderComponent },
-      { path: 'header/config', component: ConfigComponent },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'config', component: ConfigComponent },
       { path: 'home', component: HomeComponent },
-      { path: 'home/hospital', component: HospitalComponent },
-      { path: 'home/inventario', component: InventarioComponent },
-      { path: 'home/inventario/chuches', component: ChuchesComponent },
-      { path: 'home/inventario/objetos', component: ObjetosComponent },
-      { path: 'home/tienda', component: TiendaComponent },
-      { path: 'home/xuxemons', component: XuxemonsComponent },
+      { path: 'hospital', component: HospitalComponent },
+      { path: 'inventario', component: InventarioComponent },
+      { path: 'inventario/chuches', component: ChuchesComponent },
+      { path: 'inventario/objetos', component: ObjetosComponent },
+      { path: 'tienda', component: TiendaComponent },
+      { path: 'xuxemons', component: XuxemonsComponent },
       { path: 'home/xuxemons/xuxedex', component: XuxedexComponent },
       { path: 'home/xuxemons/xuxedex/crear', component: CrearComponent },
       { path: 'home/xuxemons/xuxedex/editar', component: EditarComponent },
-      { path: 'home/xuxemons/caja', component: CajaComponent },
-      { path: 'home/xuxemons/caja/alimentar', component: AlimentarComponent },
+      { path: 'caja', component: CajaComponent },
+      { path: 'alimentar', component: AlimentarComponent },
     ],
   },
   {
@@ -48,8 +47,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes),CommonModule,ReactiveFormsModule,],
-  exports: [RouterModule, ],
+  imports: [RouterModule.forChild(routes), CommonModule, ReactiveFormsModule,],
+  exports: [RouterModule,],
   declarations: [
     XuxedexComponent,
     ChuchesComponent,
@@ -59,4 +58,4 @@ const routes: Routes = [
     AlimentarComponent,
   ],
 })
-export class MainModule {}
+export class MainModule { }

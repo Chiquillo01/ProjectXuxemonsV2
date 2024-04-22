@@ -153,17 +153,14 @@ export class XuxemonsService {
    */
   alimentar(xuxemon_id: number, chuche_id: number): Observable<any> {
     const userToken = this.tokenService.getToken();
-    const authToken = this.tokenService.getToken();
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${authToken}`,
-    });
+    const body = {
+      userToken: userToken,
+      xuxemon_id: xuxemon_id,
+      chuche_id: chuche_id
+    };
 
     return this.http.put(
-      `http://127.0.0.1:8000/api/xuxemons/${xuxemon_id}/alimentar/${chuche_id}/user/${userToken}`,
-      {},
-      {
-        headers,
-      }
+      'http://127.0.0.1:8000/api/xuxemons/alimentar/user', body
     );
   }
 

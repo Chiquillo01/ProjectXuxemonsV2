@@ -1,9 +1,3 @@
-body {
-  background-color: rgb(65, 65, 65);
-  min-height: 75vh;
-  font-family: Georgia, serif;
-}
-
 .flexContainer {
   display: flex;
   flex-flow: row wrap;

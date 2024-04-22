@@ -51,7 +51,6 @@ export class AlimentarComponent {
    */
   alimentarXuxemon(newAlimentData: number) {
     const newXuxeData = parseInt(this.xuxeData.id);
-    // const newAlimentData = parseInt(this.alimentForm.value['chucheSeleccionada']);
 
     this.xuxemonsService.alimentar(newXuxeData, newAlimentData).subscribe({
       next: (returns) => {

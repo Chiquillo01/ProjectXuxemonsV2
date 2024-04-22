@@ -6,20 +6,18 @@ import { RegistroComponent } from './registro/registro.component';
 import { LandingComponent } from './landing/landing.component';
 
 const routes: Routes = [
-  {
-    path: ' ',
-    redirectTo: 'landingPage',
-    //canActivate: const [AngularFireAuthGuard]
-  },
+  // {
+  //   path: '',
+  //   pathMatch: 'full',
+  //   redirectTo: 'landingPage',
+  // },
   {
     path: 'login',
     component: LoginComponent,
-    //canActivate: const [AngularFireAuthGuard]
   },
   { 
     path: 'registro',
     component: RegistroComponent
-    //canActivate: const [AngularFireAuthGuard]
   },
   {
     path: 'landingPage',
@@ -27,7 +25,7 @@ const routes: Routes = [
     //canActivate: const [AngularFireAuthGuard]
   },
   {
-    path: 'home',
+    path: '',
     loadChildren: () => import('./main/main.module').then((m) => m.MainModule),
     //canActivate: const [AngularFireAuthGuard]
   },
