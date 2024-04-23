@@ -16,7 +16,6 @@ class CurasSeeder extends Seeder
             'Xal de frutas', 'Inxulina', 'Xocolatina'
         ];
 
-
         $enfermedades = [
             'Atracón', 'Sobredosis de azúcar', 'Bajón de azúcar'
         ];

@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(XuxemonsSeeder::class);
         $this->call(ChuchesSeeder::class);
         $this->call(CurasSeeder::class);
+        $this->call(EnfermedadesSeeder::class);
     }
 }
