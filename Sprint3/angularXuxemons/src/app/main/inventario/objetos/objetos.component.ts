@@ -89,7 +89,7 @@ export class ObjetosComponent implements OnInit {
       },
     };
     this.router.navigate(
-      ['/objetos/curar'],
+      ['/home/home/inventario/objetos/curar'],
       navigationExtras
     );
   }

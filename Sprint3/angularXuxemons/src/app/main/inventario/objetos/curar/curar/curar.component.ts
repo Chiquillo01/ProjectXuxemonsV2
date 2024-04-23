@@ -5,6 +5,7 @@ import { XuxemonsService } from 'src/app/services/xuxemons.service';
 import { TokenService } from '../../../../../services/token.service';
 import { ChuchesService } from '../../../../../services/chuches.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { XuxemonsUsers } from 'src/app/models/xuxemons/xuxemons.model';
 
 @Component({
   selector: 'app-curar',
@@ -15,10 +16,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 export class CurarComponent {
   alimentForm: FormGroup;
-  xuxeData: any;
-  chuchesList: any[] = [];
-  cumpleEvo1: boolean = false;
-  cumpleEvo2: boolean = false;
+  curaData: any;
+  XuxemonsList: XuxemonsUsers[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -34,105 +33,28 @@ export class CurarComponent {
   }
 
   ngOnInit(): void {
-    this.getChuches()
+    this.getXuxemons()
 
     this.route.queryParams.subscribe((params) => {
-      this.xuxeData = {
+      this.curaData = {
         id: params['id'],
         nombre: params['nombre'],
         archivo: params['archivo'],
-        tamano: params['tamano'],
       };
     });
   }
 
   /**
    * Nombre: alimentarXuxemon
-   * Función: envia los parametros necesarios para ejecutar la evolución
-   * @param newAlimentData
-   */
-  alimentarXuxemon(newAlimentData: number) {
-    const newXuxeData = parseInt(this.xuxeData.id);
-    // const newAlimentData = parseInt(this.alimentForm.value['chucheSeleccionada']);
-
-    this.xuxemonsService.alimentar(newXuxeData, newAlimentData).subscribe({
-      next: (returns) => {
-        console.log('Este sale por el next: ' + returns);
-        this.cumpleEvo1 = returns.cumpleEvo1;
-        this.cumpleEvo2 = returns.cumpleEvo2;
-        // alert('Le ha gustado el alimento.');
-        console.log('Este es el de evo 1: ' + returns.cumpleEvo1);
-        console.log('Este es el de evo 2: ' + returns.cumpleEvo2);
-        this.getChuches();
-        // this.ngOnInit();
-      },
-      error: (error) => {
-        console.log('Esta saliendo por el erros: ' + error);
-        // alert('No quiere tu mierda de chuche.');
-        // throw new Error(error);
-      },
-    });
-  }
-
-  /**
-   * Nombre: alimentarXuxemon
-   * Función: para editar el Xuxemon
-   * @param xuxeUser
-   */
-  accionCumpleEvo1() {
-    const newXuxeData = parseInt(this.xuxeData.id);
-
-    this.xuxemonsService
-      .evolucionarXuxemon(newXuxeData, this.cumpleEvo1)
-      .subscribe({
-        next: (returns) => {
-          console.log(returns);
-          this.cumpleEvo1 = returns.cumpleEvo1;
-          this.cumpleEvo2 = returns.cumpleEvo2;
-          alert('Evolucionado con éxito!');
-          this.ngOnInit();
-        },
-        error: (error) => {
-          alert('No quiere evolucionar.');
-          throw new Error(error);
-        },
-      });
-  }
-
-  /**
-   * Nombre: alimentarXuxemon
-   * Función: para editar el Xuxemon
-   * @param xuxeUser
-   */
-  accionCumpleEvo2() {
-    const newXuxeData = parseInt(this.xuxeData.id);
-
-    this.xuxemonsService
-      .evolucionarXuxemon2(newXuxeData, this.cumpleEvo2)
-      .subscribe({
-        next: () => {
-          alert('Evolucionado con éxito!');
-          this.ngOnInit();
-          this.router.navigate(['/home/home/xuxemons/caja']);
-        },
-        error: (error) => {
-          alert('No quiere evolucionar.');
-          throw new Error(error);
-        },
-      });
-  }
-
-  /**
-   * Nombre: alimentarXuxemon
    * Función: para editar el Xuxemon
    */
-  getChuches() {
+  getXuxemons() {
     const userToken = this.tokenService.getToken();
 
     if (userToken !== null) {
-      this.chuchesService.getAllChuchesUser(userToken).subscribe({
-        next: (chuchesUser: any) => {
-          this.chuchesList = chuchesUser[0];
+      this.xuxemonsService.getAllXuxemonsUser(userToken).subscribe({
+        next: (xuxemons: any) => {
+          this.XuxemonsList = xuxemons[0];
         },
         error: (error) => {
           console.error('Error fetching Xuxemons:', error);
@@ -141,29 +63,6 @@ export class CurarComponent {
     } else {
       console.error('User ID is null');
     }
-  }
-
-  /**
-   * Nombre: getImageStyle
-   * Función: 
-   * @param tamano
-   * @returns width
-   */
-  getImageStyle(tamano: string): any {
-    let width: number;
-    const paqueno = 50;
-    const mediano = 100;
-    const grande = 150;
-
-    switch (tamano) {
-      case 'pequeno': width = paqueno; break;
-      case 'mediano': width = mediano; break;
-      case 'grande': width = grande; break;
-      default: width = grande; break;
-    }
-    return {
-      'width.px': width,
-    };
   }
 
 }
