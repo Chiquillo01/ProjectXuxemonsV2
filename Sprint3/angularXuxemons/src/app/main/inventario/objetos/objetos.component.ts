@@ -82,7 +82,7 @@ export class ObjetosComponent implements OnInit {
     console.log('Datos de xuxeUser:', xuxeUser);
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        id: xuxeUser.xuxemon_id,
+        id: xuxeUser.id,
         nombre: xuxeUser.nombre,
         archivo: xuxeUser.archivo,
         tamano: xuxeUser.tamano,

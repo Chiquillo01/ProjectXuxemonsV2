@@ -17,7 +17,7 @@
             </div>
 
             <div class="list-container">
-                <div class="card-flex" *ngFor="let cardUser of XuxemonsList">
+                <div class="card-flex btn"  (click)="curar(cardUser)" *ngFor="let cardUser of XuxemonsList">
                     <div class="card-header">
 
                         <h3 class="card-title">

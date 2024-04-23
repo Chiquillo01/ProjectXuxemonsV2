@@ -18,6 +18,7 @@ export class CurarComponent {
   alimentForm: FormGroup;
   curaData: any;
   XuxemonsList: XuxemonsUsers[] = [];
+  curaId: any;
 
   constructor(
     private fb: FormBuilder,
@@ -33,15 +34,16 @@ export class CurarComponent {
   }
 
   ngOnInit(): void {
-    this.getEnfermos()
-
     this.route.queryParams.subscribe((params) => {
       this.curaData = {
         id: params['id'],
         nombre: params['nombre'],
         archivo: params['archivo'],
       };
+      this.curaId = params['id'];
+      this.getEnfermos();
     });
+    
   }
 
   /**
@@ -50,14 +52,16 @@ export class CurarComponent {
    */
   getEnfermos() {
     const userToken = this.tokenService.getToken();
+    // const enfId = this.curaId;
+    // console.log(enfId);
+    console.log(this.curaId);
 
     if (userToken !== null) {
-      this.curarService.getAllEnfermosUser(userToken).subscribe({
+      this.curarService.getAllEnfermosUser(userToken, this.curaId).subscribe({
         next: (xuxemons: any) => {
           this.XuxemonsList = xuxemons;
           // this.getXuxemons();
           console.log(this.XuxemonsList);
-          console.log(xuxemons[0]);
           console.log(xuxemons);
         },
         error: (error) => {
@@ -67,6 +71,22 @@ export class CurarComponent {
     } else {
       console.error('User ID is null');
     }
+  }
+
+  curar(xuxeUser: any){
+    const userToken = this.tokenService.getToken();
+    const xuxemon_id = xuxeUser.xuxemon_id;
+
+    this.curarService.curarEnf(userToken!, xuxemon_id, this.curaId).subscribe({
+      next: () => {
+        // alert('Se ha curado');
+        this.getEnfermos();
+      },
+      error: (error) => {
+        alert('No quiere tu mierda de chuche.');
+        throw new Error(error);
+      },
+    });
   }
 
 }

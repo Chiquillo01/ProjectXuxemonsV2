@@ -58,4 +58,5 @@ Route::post('/login', [Controller::class, 'login']);
 // ---------------------- //
 
 // Mostrar todos los xuxemons enfermos //
-Route::get('/enfermos/{userId}', [EnfermedadesUserController::class, 'show']);
+Route::get('/enfermos/{userId}/{enfermedadId}', [EnfermedadesUserController::class, 'show']);
+Route::post('/curar', [EnfermedadesUserController::class, 'curar']);
