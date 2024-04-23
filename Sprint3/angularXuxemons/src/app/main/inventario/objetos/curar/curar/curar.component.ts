@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { XuxemonsService } from 'src/app/services/xuxemons.service';
 import { TokenService } from '../../../../../services/token.service';
-import { ChuchesService } from '../../../../../services/chuches.service';
+import { CurarService } from '../../../../../services/curar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { XuxemonsUsers } from 'src/app/models/xuxemons/xuxemons.model';
 
@@ -25,7 +25,7 @@ export class CurarComponent {
     private route: ActivatedRoute,
     private router: Router,
     private tokenService: TokenService,
-    private chuchesService: ChuchesService
+    private curarService: CurarService
   ) {
     this.alimentForm = this.fb.group({
       chucheSeleccionada: ['', [Validators.required]],
@@ -33,7 +33,7 @@ export class CurarComponent {
   }
 
   ngOnInit(): void {
-    this.getXuxemons()
+    this.getEnfermos()
 
     this.route.queryParams.subscribe((params) => {
       this.curaData = {
@@ -48,13 +48,17 @@ export class CurarComponent {
    * Nombre: alimentarXuxemon
    * Función: para editar el Xuxemon
    */
-  getXuxemons() {
+  getEnfermos() {
     const userToken = this.tokenService.getToken();
 
     if (userToken !== null) {
-      this.xuxemonsService.getAllXuxemonsUser(userToken).subscribe({
+      this.curarService.getAllEnfermosUser(userToken).subscribe({
         next: (xuxemons: any) => {
-          this.XuxemonsList = xuxemons[0];
+          this.XuxemonsList = xuxemons;
+          // this.getXuxemons();
+          console.log(this.XuxemonsList);
+          console.log(xuxemons[0]);
+          console.log(xuxemons);
         },
         error: (error) => {
           console.error('Error fetching Xuxemons:', error);

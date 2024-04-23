@@ -6,6 +6,7 @@ use \App\Http\Controllers\Controller;
 use \App\Http\Controllers\XuxemonsController;
 use \App\Http\Controllers\XuxemonsUserController;
 use App\Http\Controllers\ChuchesUserController;
+use App\Http\Controllers\EnfermedadesUserController;
 
 // Rutas para los Xuxemons // 
 // Creación de Xuxemons //
@@ -55,3 +56,6 @@ Route::post('/register', [Controller::class, 'register']);
 Route::post('/login', [Controller::class, 'login']);
 // ---------------------- //
 // ---------------------- //
+
+// Mostrar todos los xuxemons enfermos //
+Route::get('/enfermos/{userId}', [EnfermedadesUserController::class, 'show']);
