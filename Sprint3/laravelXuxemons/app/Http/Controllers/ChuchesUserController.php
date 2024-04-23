@@ -153,7 +153,7 @@ class ChuchesUserController extends Controller
                     $nuevaChucheUsuario = new ChuchesUser();
                     $nuevaChucheUsuario->chuche_id = $chucheAleatoria;
                     $nuevaChucheUsuario->user_id = $user->id;
-                    $nuevaChucheUsuario->stack = 1; // Establecer el valor inicial de stack
+                    $nuevaChucheUsuario->stack = 1;
                     $nuevaChucheUsuario->save();
                 }
 
@@ -164,39 +164,6 @@ class ChuchesUserController extends Controller
                 $chuchesCreadas[] = $chucheAleatoria;
             }
 
-            //codigo antiguo
-
-            // if ($darChuchesUser) {
-
-            //     if (!$chucheAleatoria) {
-            //         return response()->json(['message' => 'No se pudo encontrar una chuche aleatoria.'], 404);
-            //     }
-            //     // Verificar si el usuario ya tiene esta chuche
-            //     $chucheExistente = ChuchesUser::where('user_id', $userId)
-            //         ->where('chuche_id', $chucheAleatoria)
-            //         ->first();
-
-            //     if ($chucheExistente) {
-            //         // Incrementar el valor de stack en 1
-            //         $chucheExistente->stack += 1;
-            //         $chucheExistente->save();
-
-            //         // Si ya tiene la chuche, retornar un mensaje indicándolo
-            //         return response()->json(['message' => 'Chuche añadida en el stack'], 200);
-            //     } else {
-            //         // Crear un nuevo ChuchesUser
-            //         $nuevaChucheUsuario = new ChuchesUser();
-            //         $nuevaChucheUsuario->chuche_id = $chucheAleatoria;
-            //         $nuevaChucheUsuario->user_id = $userId;
-            //         $nuevaChucheUsuario->stack = 1; // Establecer el valor inicial de stack
-            //         $nuevaChucheUsuario->save();
-
-            //         // Retornar la respuesta con éxito
-            //         return response()->json(['message' => 'Nueva chuche creada con éxito'], 200);
-            //     }
-            // } else {
-            // return response()->json(['message' => 'Ya has recogido las chuches'], 404);
-            // }
             return response()->json(['message' => 'Chuches añadidas con éxito', 'chuches' => $chuchesCreadas], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al crear la chuche aleatoria: ' . $e->getMessage()], 500);

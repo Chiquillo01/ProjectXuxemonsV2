@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\XuxemonsUser;
 use App\Models\ChuchesUser;
+use App\Models\Enfermedad;
+use App\Models\EnfermedadesUsers;
 use App\Models\User;
 use App\Models\Xuxemons;
 use Illuminate\Http\Request;
@@ -306,6 +308,34 @@ class XuxemonsUserController extends Controller
             // ------------- //
             $cumpleEvo1 = $nuevaComida >= $xuxemonInfo->evo1;
             $cumpleEvo2 = $nuevaComida >= $xuxemonInfo->evo2;
+
+            DB::transaction(function () use ($userToken, $xuxemon_id) {
+
+                $user = User::where('remember_token', $userToken)
+                    ->first();
+
+                if (!$user) {
+                    // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
+                    return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
+                }
+
+                $enfermedadExist = EnfermedadesUsers::where('xuxemon_id', $xuxemon_id)
+                    ->exists();
+
+                if (!$enfermedadExist) {
+                    $ListaEnfermedades = Enfermedad::all();
+                    // Iterar sobre cada campo
+                    foreach ($ListaEnfermedades as $enfermedad) {
+                        // Crear el xuxemon con las 3 enfermedades
+                        $nuevaEnfermedadUsuario = new EnfermedadesUsers();
+                        $nuevaEnfermedadUsuario->user_id = $user->id;
+                        $nuevaEnfermedadUsuario->xuxemon_id = $xuxemon_id;
+                        $nuevaEnfermedadUsuario->enfermedad_id = $enfermedad->id;
+                        $nuevaEnfermedadUsuario->infectado = false;
+                        $nuevaEnfermedadUsuario->save();
+                    }
+                }
+            });
 
             // ------------- //
             return response()->json([
