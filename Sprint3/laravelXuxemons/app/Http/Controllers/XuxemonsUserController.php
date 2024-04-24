@@ -309,59 +309,6 @@ class XuxemonsUserController extends Controller
             $cumpleEvo1 = $nuevaComida >= $xuxemonInfo->evo1;
             $cumpleEvo2 = $nuevaComida >= $xuxemonInfo->evo2;
 
-            DB::transaction(function () use ($userToken, $xuxemon_id) {
-
-                // Generar un número aleatorio entre 1 y 10 (10% de posibilidades)
-                $random = rand(1, 10);
-
-                // Inicializar la variable que contendrá el resultado del segundo random
-                $randomSecond = null;
-
-                // Si el número aleatorio es 1, 2 o 3 (30% de posibilidades cada uno)
-                if ($random == 1) {
-                    // Generar un número aleatorio entre 1 y 3 (cada uno con un 33.33% de posibilidades)
-                    $randomSecond = rand(1, 3);
-                } elseif ($random == 3) {
-                    // Generar dos números aleatorios entre 1 y 3 (cada uno con un 33.33% de posibilidades)
-                    $randomSecond = [rand(1, 3), rand(1, 3)];
-                }
-                elseif ($random == 6) {
-                    $randomSecond = [rand(1, 3), rand(1, 3), rand(1, 3),];
-                }
-                else{
-                    $randomSecond = 0;
-                }
-
-                $user = User::where('remember_token', $userToken)
-                    ->first();
-
-                if (!$user) {
-                    // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
-                    return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
-                }
-
-                $enfermedadExist = EnfermedadesUsers::where('xuxemon_id', $xuxemon_id)
-                    ->exists();
-
-                if (!$enfermedadExist) {
-                    $ListaEnfermedades = Enfermedad::all();
-                    // Iterar sobre cada campo
-                    foreach ($ListaEnfermedades as $enfermedad) {
-                        $activo = false;
-                        if($enfermedad->enfermedad_id == $randomSecond){
-                            $activo = true;
-                        }
-                        // Crear el xuxemon con las 3 enfermedades
-                        $nuevaEnfermedadUsuario = new EnfermedadesUsers();
-                        $nuevaEnfermedadUsuario->user_id = $user->id;
-                        $nuevaEnfermedadUsuario->xuxemon_id = $xuxemon_id;
-                        $nuevaEnfermedadUsuario->enfermedad_id = $enfermedad->id;
-                        $nuevaEnfermedadUsuario->infectado = $activo;
-                        $nuevaEnfermedadUsuario->save();
-                    }
-                }
-            });
-
             // ------------- //
             return response()->json([
                 'cumpleEvo1' => $cumpleEvo1,

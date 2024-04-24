@@ -31,6 +31,17 @@ export class XuxemonsService {
     );
   }
 
+    /**
+   * Nombre: getAllXuxemonsEnfermosUser
+   * Función: Realizar la solicitud HTTP GET para obtener todos los XuxemonsUsers
+   * @returns Un observable que emite un arreglo de XuxemonsUsers
+   */
+  getAllXuxemonsEnfermosUser(userToken: string): Observable<XuxemonsUsers[]> {
+    return this.http.get<XuxemonsUsers[]>(
+      `http://127.0.0.1:8000/api/xuxemonsEnfermosUser/${userToken}`
+    );
+  }
+
   /**
    * Nombre: getAllXuxemonsUserActivos
    * Función: Realizar la solicitud HTTP GET para obtener todos los XuxemonsUsers

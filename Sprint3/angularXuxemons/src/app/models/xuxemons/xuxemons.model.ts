@@ -9,6 +9,7 @@ export interface XuxemonsUsers {
   evo2: number;
   activo: number;
   favorito: number;
+  enfermo: number;
   created_at: string;
   updated_at: string;
 }

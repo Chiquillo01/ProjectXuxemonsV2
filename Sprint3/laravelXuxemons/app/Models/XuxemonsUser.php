@@ -16,6 +16,7 @@ class XuxemonsUser extends Model
         'comida',
         'activo',
         'favorito',
+        'enfermo',
     ];
     
     /**

@@ -173,6 +173,18 @@ export class CajaComponent implements OnInit {
   }
 
   /**
+   * Nombre: favorito
+   * Función: Envia los valores necesarios para añadir o quitar al xuxemon 
+   * seleccionado como favorito
+   * @param xuxeUser
+   */
+  hospital() {
+    this.router.navigate(
+      ['/home/home/hospital']
+    );
+  }
+
+  /**
    * Nombre: alimentar
    * Función: Envia al usuario a a ruta para alimentar al Xuxemon, a su vez esta enviando los datos del xuxuemon
    */

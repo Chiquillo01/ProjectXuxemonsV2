@@ -64,8 +64,13 @@
         </div>
 
 
-        <div class="imgFormat">
+        <div class="imgFormat" *ngIf="!cardUser.enfermo">
           <img [src]="'../assets/xuxemons/' + cardUser.archivo" [attr.alt]="cardUser.nombre"
+            [ngStyle]="getImageStyle(cardUser.tamano)">
+        </div>
+
+        <div class="imgFormat" *ngIf="cardUser.enfermo">
+          <img src="../../../../assets/xuxemons/enfermo.png" alt="enfermo"
             [ngStyle]="getImageStyle(cardUser.tamano)">
         </div>
 
@@ -81,7 +86,7 @@
           </a>
         </div>
 
-        <div *ngIf="cardUser.favorito == 0">
+        <div *ngIf="cardUser.favorito == 0 && !cardUser.enfermo">
           <button class="alimentar-btn" (click)="alimentar(cardUser)">
             Alimentar
           </button>
@@ -90,11 +95,18 @@
             Liberar
           </button>
         </div>
-        <div *ngIf="cardUser.favorito == 1">
+        <div *ngIf="cardUser.favorito == 1 && !cardUser.enfermo">
           <button class="alimentar-btn-fav" (click)="alimentar(cardUser)">
             Alimentar
           </button>
         </div>
+
+        <div *ngIf="cardUser.enfermo">
+          <button class="alimentar-btn-fav" (click)="hospital()">
+            Ir al Hospital
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

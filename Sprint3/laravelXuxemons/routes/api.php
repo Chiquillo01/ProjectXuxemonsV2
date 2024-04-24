@@ -56,7 +56,12 @@ Route::post('/register', [Controller::class, 'register']);
 Route::post('/login', [Controller::class, 'login']);
 // ---------------------- //
 // ---------------------- //
-
+// Mostrar todos los xuxemons enfermos //
+Route::get('/xuxemonsEnfermosUser/{userId}', [EnfermedadesUserController::class, 'showEnfermos']);
 // Mostrar todos los xuxemons enfermos //
 Route::get('/enfermos/{userId}/{enfermedadId}', [EnfermedadesUserController::class, 'show']);
+// Actualizar alimentos xuxemon usuario //
+Route::put('/enfermar', [EnfermedadesUserController::class, 'enfermar']);
+// Actualizar alimentos xuxemon usuario //
+Route::put('/xuxemons/{xuxemon_id}/alimentar/{chuche_id}/user/{user_Id}', [XuxemonsUserController::class, 'alimentar']);
 Route::post('/curar', [EnfermedadesUserController::class, 'curar']);

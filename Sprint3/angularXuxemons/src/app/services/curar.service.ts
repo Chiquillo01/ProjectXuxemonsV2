@@ -41,4 +41,23 @@ export class CurarService {
     );
   }
 
+    /**
+ * Nombre: xuxemonFav
+ * Función: 
+ * @returns Un observable que emite la respuesta de la solicitud HTTP.
+ */
+    enfermar(userToken: string, xuxemon_id: number): Observable<any> {
+      const body = {
+        userToken: userToken,
+        xuxemon_id: xuxemon_id
+      };
+
+      console.log(body);
+      console.log('http://127.0.0.1:8000/api/enfermar', body);
+  
+      return this.http.put<any>(
+        'http://127.0.0.1:8000/api/enfermar', body
+      );
+    }
+
 }

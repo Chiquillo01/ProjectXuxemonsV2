@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { XuxemonsService } from 'src/app/services/xuxemons.service';
 import { TokenService } from '../../../../services/token.service';
 import { ChuchesService } from '../../../../services/chuches.service';
+import { CurarService } from '../../../../services/curar.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -21,6 +22,7 @@ export class AlimentarComponent {
   constructor(
     private fb: FormBuilder,
     public xuxemonsService: XuxemonsService,
+    public curarService: CurarService,
     private route: ActivatedRoute,
     private router: Router,
     private tokenService: TokenService,
@@ -50,6 +52,7 @@ export class AlimentarComponent {
    * @param newAlimentData
    */
   alimentarXuxemon(newAlimentData: number) {
+    const userToken = this.tokenService.getToken();
     const newXuxeData = parseInt(this.xuxeData.id);
     // const newAlimentData = parseInt(this.alimentForm.value['chucheSeleccionada']);
 
@@ -70,6 +73,18 @@ export class AlimentarComponent {
         // throw new Error(error);
       },
     });
+
+    this.curarService.enfermar(userToken!, newXuxeData).subscribe({
+      next: () => {
+        // alert('Se ha curado');
+        // this.getEnfermos();
+      },
+      error: (error) => {
+        alert('No se quiere enfermar.');
+        throw new Error(error);
+      },
+    });
+
   }
 
   /**
