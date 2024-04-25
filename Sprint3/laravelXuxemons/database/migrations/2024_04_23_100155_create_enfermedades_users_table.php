@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('enfermedades_users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->char('user_id', 6);
             $table->unsignedBigInteger('xuxemon_id');
             $table->unsignedBigInteger('enfermedad_id');
             $table->boolean('infectado')->default(false);
@@ -21,7 +21,7 @@ return new class extends Migration
 
             // Definir las claves foráneas
             $table->foreign('xuxemon_id')->references('id')->on('xuxemons')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('enfermedad_id')->references('id')->on('enfermedades')->onDelete('cascade');
         });
     }

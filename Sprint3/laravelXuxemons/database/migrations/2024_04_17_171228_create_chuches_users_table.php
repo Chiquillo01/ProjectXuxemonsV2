@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('chuches_users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('chuche_id');
-            $table->unsignedBigInteger('user_id');
+            $table->char('user_id', 6);
             $table->unsignedBigInteger('stack');
             $table->timestamps();
 
             // Definir las claves foráneas
             $table->foreign('chuche_id')->references('id')->on('chuches')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

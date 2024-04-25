@@ -47,20 +47,31 @@ class XuxemonsUserController extends Controller
 
             // Recoge el id de un xuxemon aleatorio
             $xuxemonAleatorio = self::obtenerXuxemonAleatorio();
+
+            // $Xuxemons = Xuxemons::where('id', $xuxemonAleatorio->id)
+            //     ->first();
+
             // Si no exixte usuario retornara el error
             if (!$xuxemonAleatorio) {
                 return response()->json(['message' => 'No se pudo encontrar Xuxemon', $xuxemonAleatorio], 404);
             }
 
-            // Crear el nuevo Xuxemon asociado al usuario
-            $nuevoXuxemonUsuario = new XuxemonsUser();
-            $nuevoXuxemonUsuario->xuxemon_id = $xuxemonAleatorio->id;
-            $nuevoXuxemonUsuario->user_id = $user->id;
-            $nuevoXuxemonUsuario->tamano = $xuxemonAleatorio->tamano;
-            $nuevoXuxemonUsuario->evo1 = $xuxemonAleatorio->evo1;
-            $nuevoXuxemonUsuario->evo2 = $xuxemonAleatorio->evo2;
+            //revisar que no se repita xuxemon repetido con el mismo tamaño
+            // if ($xuxemonAleatorio->tamano == $Xuxemons->tamano) {
+            //     $xuxemonAleatorio = self::obtenerXuxemonAleatorio();
+            // }
+            // else{
+            //     return response()->json(['message' => 'Tiene el mismo tamaño'], 404);
+            // }
+                // Crear el nuevo Xuxemon asociado al usuario
+                $nuevoXuxemonUsuario = new XuxemonsUser();
+                $nuevoXuxemonUsuario->xuxemon_id = $xuxemonAleatorio->id;
+                $nuevoXuxemonUsuario->user_id = $user->id;
+                $nuevoXuxemonUsuario->tamano = $xuxemonAleatorio->tamano;
+                $nuevoXuxemonUsuario->evo1 = $xuxemonAleatorio->evo1;
+                $nuevoXuxemonUsuario->evo2 = $xuxemonAleatorio->evo2;
 
-            $nuevoXuxemonUsuario->save();
+                $nuevoXuxemonUsuario->save();
 
             return response()->json(['message' => 'Nuevo Xuxemon creado con éxito'], 200);
         } catch (\Exception $e) {
