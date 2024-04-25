@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MainComponent } from './main.component';
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
 import { ConfigComponent } from './header/config/config.component';
 import { HomeComponent } from './home/home.component';
 import { HospitalComponent } from './hospital/hospital.component';
@@ -30,16 +28,14 @@ const routes: Routes = [
       { path: 'home', component: HomeComponent },
       { path: 'hospital', component: HospitalComponent },
       { path: 'inventario', component: InventarioComponent },
-      { path: 'inventario/chuches', component: ChuchesComponent },
-      { path: 'inventario/objetos', component: ObjetosComponent },
-      { path: 'home/inventario/objetos/curar', component: CurarComponent },
+      { path: 'chuches', component: ChuchesComponent },
+      { path: 'objetos', component: ObjetosComponent },
+      { path: 'inventario/objetos/curar', component: CurarComponent },
       { path: 'tienda', component: TiendaComponent },
       { path: 'xuxemons', component: XuxemonsComponent },
-      { path: 'home/inventario/objetos/curar', component: CurarComponent },
-
-      { path: 'home/xuxemons/xuxedex', component: XuxedexComponent },
-      { path: 'home/xuxemons/xuxedex/crear', component: CrearComponent },
-      { path: 'home/xuxemons/xuxedex/editar', component: EditarComponent },
+      { path: 'xuxedex', component: XuxedexComponent },
+      { path: 'crear', component: CrearComponent },
+      { path: 'editar', component: EditarComponent },
       { path: 'caja', component: CajaComponent },
       { path: 'alimentar', component: AlimentarComponent },
     ],
