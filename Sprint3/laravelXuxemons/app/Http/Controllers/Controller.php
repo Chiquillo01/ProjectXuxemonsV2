@@ -40,11 +40,20 @@ class Controller extends BaseController
                 'rol' => ['required'],
             ]);
 
+            // Genera un código aleatorio de 6 cifras que combina letras y números //
+            $codigoAleatorio = '';
+            $longitud = 6;
+            $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for ($i = 0; $i < $longitud; $i++) {
+                $codigoAleatorio .= $caracteres[rand(0, strlen($caracteres) - 1)];
+            }
+
             // Codificar el valor del rol al estar trabajando con 0/1 //
             $rolStatus = $request->input('rol') ? true : false;
 
             // Crea el usuario //
             $user = new User();
+            $user->id = $codigoAleatorio;
             $user->nick = $request->input('nick');
             $user->email = $request->input('email');
             $user->password = Hash::make($request->input('password'));
