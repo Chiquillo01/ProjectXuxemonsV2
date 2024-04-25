@@ -32,10 +32,27 @@
           onmouseover="this.src='../../../../assets/xuxemons/iconos/download.gif';"
           onmouseout="this.src='../../../assets/xuxemons/iconos/download1.png'" (click)="activo(cardUser)">
         <div>
-          <button class="alimentar-btn-fav" (click)="alimentar(cardUser)">
+          <button class="alimentar-btn-fav" (click)="alimentar(cardUser)" *ngIf="!cardUser.noComer && !cardUser.enfermo">
             Alimentar
           </button>
         </div>
+
+        <div *ngIf="cardUser.enfermo && cardUser.noComer">
+          <button class="alimentar-btn-fav" (click)="hospital()">
+            Ir al Hospital
+          </button>
+        </div>
+
+        <div *ngIf="cardUser.enfermo && !cardUser.noComer">
+          <button class="alimentar-btn" (click)="alimentar(cardUser)">
+            Alimentar
+          </button>
+
+          <button class="eliminar-btn" (click)="hospital()">
+            Ir al Hospital
+          </button>
+        </div>
+
       </div>
     </div>
 
@@ -101,8 +118,18 @@
           </button>
         </div>
 
-        <div *ngIf="cardUser.enfermo">
+        <div *ngIf="cardUser.enfermo && cardUser.noComer">
           <button class="alimentar-btn-fav" (click)="hospital()">
+            Ir al Hospital
+          </button>
+        </div>
+
+        <div *ngIf="cardUser.enfermo && !cardUser.noComer">
+          <button class="alimentar-btn" (click)="alimentar(cardUser)">
+            Alimentar
+          </button>
+
+          <button class="eliminar-btn" (click)="hospital()">
             Ir al Hospital
           </button>
         </div>

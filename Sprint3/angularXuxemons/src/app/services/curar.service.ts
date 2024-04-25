@@ -25,6 +25,21 @@ export class CurarService {
   }
 
   /**
+   * Nombre: getAllChuchesUser
+   * Función: Obtener todas las chuches que tiene un usuario
+   * @returns la url de la api
+   */
+  getAllEnfermedades(userToken: string): Observable<EnfermedadesUser[]> {
+    // const body = {
+    //   token: userToken
+    // };
+    return this.http.get<EnfermedadesUser[]>(
+      `http://127.0.0.1:8000/api/enfermedades/${userToken}`
+    );
+  }
+
+
+  /**
  * Nombre: xuxemonFav
  * Función: 
  * @returns Un observable que emite la respuesta de la solicitud HTTP.
@@ -51,9 +66,6 @@ export class CurarService {
         userToken: userToken,
         xuxemon_id: xuxemon_id
       };
-
-      console.log(body);
-      console.log('http://127.0.0.1:8000/api/enfermar', body);
   
       return this.http.put<any>(
         'http://127.0.0.1:8000/api/enfermar', body

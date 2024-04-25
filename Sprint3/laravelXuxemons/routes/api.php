@@ -56,6 +56,8 @@ Route::post('/register', [Controller::class, 'register']);
 Route::post('/login', [Controller::class, 'login']);
 // ---------------------- //
 // ---------------------- //
+// Mostrar todas las enfermedades //
+Route::get('/enfermedades/{userId}', [EnfermedadesUserController::class, 'showEnfermedades']);
 // Mostrar todos los xuxemons enfermos //
 Route::get('/xuxemonsEnfermosUser/{userId}', [EnfermedadesUserController::class, 'showEnfermos']);
 // Mostrar todos los xuxemons enfermos //

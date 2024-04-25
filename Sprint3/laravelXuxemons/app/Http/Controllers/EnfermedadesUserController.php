@@ -110,6 +110,41 @@ class EnfermedadesUserController extends Controller
 
 
     /**
+     * Nombre: show
+     * Función: Enviar los datos para que se muestren en el frontend
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showEnfermedades(Request $request, $userToken)
+    {
+        try {
+
+            $user = User::where('remember_token', $userToken)
+                ->first();
+
+            if (!$user) {
+                // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
+                return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
+            }
+
+            // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
+            $enfermedades = EnfermedadesUsers::where('user_id', $user->id)
+                ->get();
+
+            if ($enfermedades->isEmpty()) {
+                // Imprimir un mensaje de registro si la colección está vacía
+                Log::info('No se encontraron enfermedades para el usuario con ID: ' . $user->id);
+            }
+
+            // Retorna todos los xuxemons en forma json
+            return response()->json($enfermedades, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Ha ocurrido un error al retornar los xuxemons: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+    /**
      * Nombre: updateFav
      * Función: Gracias al valor que se le pasa por paremetro hace un update
      * a la db con el nuevo valor, esto lo hace a todos los registros de la tabla
@@ -232,7 +267,6 @@ class EnfermedadesUserController extends Controller
                 $XuxemonsEnfermos->enfermo = true;
                 $XuxemonsEnfermos->save();
             });
-
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al curar al xuxemon: ' . $e->getMessage()], 500);
         }

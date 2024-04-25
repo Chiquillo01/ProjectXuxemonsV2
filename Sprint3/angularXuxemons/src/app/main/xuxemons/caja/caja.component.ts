@@ -4,6 +4,8 @@ import { NavigationExtras, Router } from '@angular/router';
 import { TokenService } from '../../../services/token.service';
 import { XuxemonsService } from '../../../services/xuxemons.service';
 import { XuxemonsUsers } from '../../../models/xuxemons/xuxemons.model';
+import { EnfermedadesUser } from 'src/app/models/enfermedadesUser/enfermedadesUser.model';
+import { CurarService } from 'src/app/services/curar.service';
 
 @Component({
   selector: 'app-caja',
@@ -13,14 +15,17 @@ import { XuxemonsUsers } from '../../../models/xuxemons/xuxemons.model';
 export class CajaComponent implements OnInit {
   xuxemonsUser: XuxemonsUsers[] = [];
   xuxemonsUserActivos: XuxemonsUsers[] = [];
+  enfermedades: EnfermedadesUser[] = [];
 
   constructor(
     private tokenService: TokenService,
     private xuxemonsService: XuxemonsService,
+    private curarService: CurarService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.getEnfermedades();
     this.getXuxemons();
     this.getXuxemonsActivos();
   }
@@ -67,6 +72,20 @@ export class CajaComponent implements OnInit {
       this.xuxemonsService.getAllXuxemonsUser(userToken).subscribe({
         next: (xuxemonsUser: any) => {
           this.xuxemonsUser = xuxemonsUser[0];
+          this.xuxemonsUser.forEach((xuxemon) => {
+            this.enfermedades.forEach((enfermedad) => {
+              if (xuxemon.xuxemon_id === enfermedad.xuxemon_id) {
+                if (enfermedad.enfermedad_id == 1) {
+                  if (enfermedad.infectado) {
+                    xuxemon.noComer = true;
+                  } else {
+                    xuxemon.noComer = false;
+                  }
+                }
+              }
+            });
+          });
+          console.log(this.xuxemonsUserActivos);
         },
         error: (error) => {
           console.error('Error fetching Xuxemons:', error);
@@ -88,9 +107,58 @@ export class CajaComponent implements OnInit {
       this.xuxemonsService.getAllXuxemonsUserActivos(userToken).subscribe({
         next: (xuxemonsUserActivos: any) => {
           this.xuxemonsUserActivos = xuxemonsUserActivos[0];
+          // console.log(xuxemonsUserActivos[0]);
+          // console.log(this.xuxemonsUserActivos);
+          this.xuxemonsUserActivos.forEach((xuxemonActivo) => {
+            this.enfermedades.forEach((enfermedad) => {
+              if (xuxemonActivo.xuxemon_id === enfermedad.xuxemon_id) {
+                if (enfermedad.enfermedad_id == 1) {
+                  if (enfermedad.infectado) {
+                    xuxemonActivo.noComer = true;
+                  } else {
+                    xuxemonActivo.noComer = false;
+                  }
+                }
+                if (enfermedad.enfermedad_id == 2) {
+                  if (enfermedad.infectado) {
+                    xuxemonActivo.inactivo = true;
+                  } else {
+                    xuxemonActivo.inactivo = false;
+                  }
+                }
+              }
+            });
+          });
+          console.log(this.xuxemonsUserActivos);
         },
         error: (error) => {
           console.error('Error fetching Xuxemons:', error);
+        },
+      });
+    } else {
+      console.error('User ID is null');
+    }
+  }
+
+  /**
+   * Nombre: alimentarXuxemon
+   * Función: para editar el Xuxemon
+   */
+  getEnfermedades() {
+    const userToken = this.tokenService.getToken();
+    // const enfId = this.curaId;
+    // console.log(enfId);
+
+    if (userToken !== null) {
+      this.curarService.getAllEnfermedades(userToken).subscribe({
+        next: (Enfermedades: any) => {
+          this.enfermedades = Enfermedades;
+          // this.getXuxemons();
+          // console.log(this.enfermedades);
+          // console.log(Enfermedades);
+        },
+        error: (error) => {
+          console.error('Error obteniendo enfermedades:', error);
         },
       });
     } else {
@@ -110,7 +178,6 @@ export class CajaComponent implements OnInit {
       next: () => {
         // alert('Xuxemon creardo con exito.');
         this.getXuxemons();
-        
       },
       error: () => {
         alert('Xuxemon no se ha podido crear.');
@@ -131,13 +198,12 @@ export class CajaComponent implements OnInit {
     if (ContadorActivo < 4 || xuxeUser.activo == 1) {
       this.xuxemonsService.xuxemonActivo(userToken!, xuxemon_id).subscribe({
         next: () => {
-          alert('Se va al activo.');
+          // alert('Se va al activo.');
           this.getXuxemonsActivos();
           this.getXuxemons();
-          if(xuxeUser.activo == 0){
+          if (xuxeUser.activo == 0) {
             xuxeUser.activo = 1;
-          }
-          else{
+          } else {
             xuxeUser.activo = 0;
           }
         },
@@ -151,7 +217,7 @@ export class CajaComponent implements OnInit {
 
   /**
    * Nombre: favorito
-   * Función: Envia los valores necesarios para añadir o quitar al xuxemon 
+   * Función: Envia los valores necesarios para añadir o quitar al xuxemon
    * seleccionado como favorito
    * @param xuxeUser
    */
@@ -161,7 +227,7 @@ export class CajaComponent implements OnInit {
 
     this.xuxemonsService.xuxemonFav(userToken!, xuxemon_id).subscribe({
       next: () => {
-        alert('Se ha podido modificar');
+        // alert('Se ha podido modificar');
         this.getXuxemonsActivos();
         this.getXuxemons();
       },
@@ -174,14 +240,12 @@ export class CajaComponent implements OnInit {
 
   /**
    * Nombre: favorito
-   * Función: Envia los valores necesarios para añadir o quitar al xuxemon 
+   * Función: Envia los valores necesarios para añadir o quitar al xuxemon
    * seleccionado como favorito
    * @param xuxeUser
    */
   hospital() {
-    this.router.navigate(
-      ['/home/home/hospital']
-    );
+    this.router.navigate(['/home/home/hospital']);
   }
 
   /**
