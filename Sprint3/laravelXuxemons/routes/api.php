@@ -45,6 +45,8 @@ Route::get('/horario/show/{userId}', [ChuchesUserController::class, 'showHorario
 // Crear chuches aleatorias //
 Route::post('/chuches/horario/{userId}', [ChuchesUserController::class, 'horario']);
 // Crear chuches aleatorias //
+Route::post('/chuches/actualizarHorario/{userId}', [ChuchesUserController::class, 'actualizarHorario']);
+// Crear chuches aleatorias //
 Route::post('/chuches/random/{userId}', [ChuchesUserController::class, 'debug']);
 // Mostrar todas las xuxes del usuario //
 Route::get('/chuchesUser/{userId}', [ChuchesUserController::class, 'show']);

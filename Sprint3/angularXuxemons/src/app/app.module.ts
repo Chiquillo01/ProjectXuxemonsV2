@@ -19,6 +19,7 @@ import { HeaderComponent } from './main/header/header.component';
 import { FooterComponent } from './main/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { LandingComponent } from './landing/landing.component';
+import { ContactosComponent } from './main/contactos/contactos.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { LandingComponent } from './landing/landing.component';
     HeaderComponent,
     FooterComponent,
     LandingComponent,
+    // ContactosComponent,
   ],
   imports: [
     BrowserModule,

@@ -42,7 +42,8 @@ class ChuchesUserController extends Controller
         }
 
         $existeHorario = Horario::where('id_users', $user->id)
-            ->exists();
+            ->first();
+
 
         if (!$existeHorario) {
             $nuevoHorario = new Horario();
@@ -51,7 +52,30 @@ class ChuchesUserController extends Controller
             $nuevoHorario->date_debug = Carbon::now();
             $nuevoHorario->id_users = $user->id;
             $nuevoHorario->save();
-        } else {
+        }
+    }
+
+    /**
+     * Nombre: horario
+     * Función: 
+     * @return mixed
+     */
+    public function actualizarHorario(Request $request, $userToken)
+    {
+
+        $user = User::where('remember_token', $userToken)
+            ->first();
+
+        if (!$user) {
+            // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
+            return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
+        }
+
+        $existeHorario = Horario::where('id_users', $user->id)
+            ->first();
+
+
+        if (!$existeHorario) {
             $actualizarHorario = Horario::where('id_users', $user->id)
                 ->first();
 
