@@ -41,42 +41,18 @@ class ChuchesUserController extends Controller
             return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
         }
 
-        $existeHorario = Horario::where('id_users', $user->id)
-            ->first();
-
+        $existeHorario = Horario::where('id_users', $user->idUser)
+            ->exists();
 
         if (!$existeHorario) {
             $nuevoHorario = new Horario();
             $nuevoHorario->chuche_maximas;
             $nuevoHorario->debug;
             $nuevoHorario->date_debug = Carbon::now();
-            $nuevoHorario->id_users = $user->id;
+            $nuevoHorario->id_users = $user->idUser;
             $nuevoHorario->save();
-        }
-    }
-
-    /**
-     * Nombre: horario
-     * Función: 
-     * @return mixed
-     */
-    public function actualizarHorario(Request $request, $userToken)
-    {
-
-        $user = User::where('remember_token', $userToken)
-            ->first();
-
-        if (!$user) {
-            // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
-            return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
-        }
-
-        $existeHorario = Horario::where('id_users', $user->id)
-            ->first();
-
-
-        if (!$existeHorario) {
-            $actualizarHorario = Horario::where('id_users', $user->id)
+        } else {
+            $actualizarHorario = Horario::where('id_users', $user->idUser)
                 ->first();
 
             $actualizarHorario->date_debug = Carbon::now();
@@ -85,11 +61,6 @@ class ChuchesUserController extends Controller
         }
     }
 
-    /**
-     * Nombre: ReclamarHorario
-     * Función: 
-     * @return mixed
-     */
     public function ReclamarHorario(Request $request, $userToken)
     {
         $user = User::where('remember_token', $userToken)->first();
@@ -98,7 +69,7 @@ class ChuchesUserController extends Controller
             return response()->json(['message' => 'Usuario no encontrado'], 404);
         }
 
-        $horario = Horario::where('id_users', $user->id)->first();
+        $horario = Horario::where('id_users', $user->idUser)->first();
 
         if ($horario && is_string($horario->date_debug)) {
             $horario->date_debug = Carbon::parse($horario->date_debug); // Convertir a instancia de Carbon
@@ -109,7 +80,7 @@ class ChuchesUserController extends Controller
         $horaActual = intval(Carbon::now()->format('H'));
 
         if ($horario) {
-            // if ($diaGuardado < $diaActual) {
+         // if ($diaGuardado < $diaActual) {
             if ($horaActual > 9 && $diaGuardado < $diaActual) {
                 $horario->debug = true;
                 $horario->save();
@@ -144,7 +115,7 @@ class ChuchesUserController extends Controller
 
 
             //Verifica si puede dar las chuches
-            $darChuchesUser = Horario::where('id_users', $user->id)
+            $darChuchesUser = Horario::where('id_users', $user->idUser)
                 ->where('debug', true)
                 ->first();
 
@@ -164,7 +135,7 @@ class ChuchesUserController extends Controller
                 }
 
                 // Verificar si el usuario ya tiene esta chuche
-                $chucheExistente = ChuchesUser::where('user_id', $user->id)
+                $chucheExistente = ChuchesUser::where('user_id', $user->idUser)
                     ->where('chuche_id', $chucheAleatoria)
                     ->first();
 
@@ -176,7 +147,7 @@ class ChuchesUserController extends Controller
                     // Crear un nuevo ChuchesUser
                     $nuevaChucheUsuario = new ChuchesUser();
                     $nuevaChucheUsuario->chuche_id = $chucheAleatoria;
-                    $nuevaChucheUsuario->user_id = $user->id;
+                    $nuevaChucheUsuario->user_id = $user->idUser;
                     $nuevaChucheUsuario->stack = 1;
                     $nuevaChucheUsuario->save();
                 }
@@ -214,7 +185,7 @@ class ChuchesUserController extends Controller
 
 
             // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
-            $chuches = ChuchesUser::where('user_id', $user->id)
+            $chuches = ChuchesUser::where('user_id', $user->idUser)
                 ->join('chuches', 'chuches_users.chuche_id', '=', 'chuches.id')
                 ->select('chuches_users.*', 'chuches.nombre', 'chuches.dinero', 'chuches.modificador', 'chuches.archivo')
                 ->get();
@@ -261,7 +232,7 @@ class ChuchesUserController extends Controller
             }
 
             // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
-            $horario = Horario::where('id_users', $user->id)->get();
+            $horario = Horario::where('id_users', $user->idUser)->get();
 
             // Retorna todos los xuxemons en forma json
             return response()->json([$horario, 200]);

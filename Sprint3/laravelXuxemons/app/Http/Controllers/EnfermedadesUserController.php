@@ -35,7 +35,7 @@ class EnfermedadesUserController extends Controller
             }
 
             // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
-            $xuxemonsEnfermos = EnfermedadesUsers::where('user_id', $user->id)
+            $xuxemonsEnfermos = EnfermedadesUsers::where('user_id', $user->idUser)
                 ->where('enfermedad_id', $enfermedad)
                 ->where('infectado', 1)
                 ->join('xuxemons', 'enfermedades_users.xuxemon_id', '=', 'xuxemons.id')
@@ -52,7 +52,7 @@ class EnfermedadesUserController extends Controller
 
             if ($xuxemonsEnfermos->isEmpty()) {
                 // Imprimir un mensaje de registro si la colección está vacía
-                Log::info('No se encontraron Xuxemons enfermos para el usuario con ID: ' . $user->id);
+                Log::info('No se encontraron Xuxemons enfermos para el usuario con ID: ' . $user->idUser);
             }
 
             // Retorna todos los xuxemons en forma json
@@ -81,7 +81,7 @@ class EnfermedadesUserController extends Controller
             }
 
             // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
-            $xuxemonsEnfermos = XuxemonsUser::where('user_id', $user->id)
+            $xuxemonsEnfermos = XuxemonsUser::where('user_id', $user->idUser)
                 ->join('xuxemons', 'xuxemons_users.xuxemon_id', '=', 'xuxemons.id')
                 ->where('xuxemons_users.enfermo', 1)
                 ->select(
@@ -98,7 +98,7 @@ class EnfermedadesUserController extends Controller
 
             if ($xuxemonsEnfermos->isEmpty()) {
                 // Imprimir un mensaje de registro si la colección está vacía
-                Log::info('No se encontraron Xuxemons enfermos para el usuario con ID: ' . $user->id);
+                Log::info('No se encontraron Xuxemons enfermos para el usuario con ID: ' . $user->idUser);
             }
 
             // Retorna todos los xuxemons en forma json
@@ -128,12 +128,12 @@ class EnfermedadesUserController extends Controller
             }
 
             // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
-            $enfermedades = EnfermedadesUsers::where('user_id', $user->id)
+            $enfermedades = EnfermedadesUsers::where('user_id', $user->idUser)
                 ->get();
 
             if ($enfermedades->isEmpty()) {
                 // Imprimir un mensaje de registro si la colección está vacía
-                Log::info('No se encontraron enfermedades para el usuario con ID: ' . $user->id);
+                Log::info('No se encontraron enfermedades para el usuario con ID: ' . $user->idUser);
             }
 
             // Retorna todos los xuxemons en forma json
@@ -165,7 +165,7 @@ class EnfermedadesUserController extends Controller
                 return response()->json(['message' => 'Usuario no encontrado', $user], 404);
             }
 
-            $CurarEnfermedad = EnfermedadesUsers::where('user_id', $user->id)
+            $CurarEnfermedad = EnfermedadesUsers::where('user_id', $user->idUser)
                 ->where('xuxemon_id', $xuxemon_id)
                 ->where('enfermedad_id', $enfId)
                 ->first();
@@ -182,7 +182,7 @@ class EnfermedadesUserController extends Controller
                     return response()->json(['message' => 'Usuario no encontrado al enfermar', $user], 404);
                 }
 
-                $XuxemonsEnfermos = XuxemonsUser::where('user_id', $user->id)
+                $XuxemonsEnfermos = XuxemonsUser::where('user_id', $user->idUser)
                     ->where('xuxemon_id', $xuxemon_id)
                     ->first();
 
@@ -243,7 +243,7 @@ class EnfermedadesUserController extends Controller
                     }
                     // Crear el xuxemon con las 3 enfermedades
                     $nuevaEnfermedadUsuario = new EnfermedadesUsers();
-                    $nuevaEnfermedadUsuario->user_id = $user->id;
+                    $nuevaEnfermedadUsuario->user_id = $user->idUser;
                     $nuevaEnfermedadUsuario->xuxemon_id = $xuxemon_id;
                     $nuevaEnfermedadUsuario->enfermedad_id = $enfermedad->id;
                     $nuevaEnfermedadUsuario->infectado = $activo;
@@ -260,7 +260,7 @@ class EnfermedadesUserController extends Controller
                     return response()->json(['message' => 'Usuario no encontrado al enfermar', $user], 404);
                 }
 
-                $XuxemonsEnfermos = XuxemonsUser::where('user_id', $user->id)
+                $XuxemonsEnfermos = XuxemonsUser::where('user_id', $user->idUser)
                     ->where('xuxemon_id', $xuxemon_id)
                     ->first();
 

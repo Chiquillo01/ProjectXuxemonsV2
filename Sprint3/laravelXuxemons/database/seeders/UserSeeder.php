@@ -15,7 +15,8 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'id' => 'A1B2C3',
+            'id' => '1',
+            'idUser' => 'A1B2C3',
             'nick' => 'admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('123456Ab.'),
@@ -23,9 +24,37 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'id' => 'A2B3C4',
+            'id' => '2',
+            'idUser' => 'A2B3C4',
             'nick' => 'usuario',
             'email' => 'usuario@gmail.com',
+            'password' => Hash::make('123456Ab.'),
+            'rol' => 0,
+        ]);
+
+        DB::table('users')->insert([
+            'id' => '3',
+            'idUser' => 'AAAAA1',
+            'nick' => 'oriol',
+            'email' => 'oriol@gmail.com',
+            'password' => Hash::make('123456Ab.'),
+            'rol' => 0,
+        ]);
+
+        DB::table('users')->insert([
+            'id' => '4',
+            'idUser' => 'A4B5C6',
+            'nick' => 'edgar',
+            'email' => 'edgar@gmail.com',
+            'password' => Hash::make('123456Ab.'),
+            'rol' => 0,
+        ]);
+
+        DB::table('users')->insert([
+            'id' => '5',
+            'idUser' => 'A5B6C7',
+            'nick' => 'rafa',
+            'email' => 'rafa@gmail.com',
             'password' => Hash::make('123456Ab.'),
             'rol' => 0,
         ]);

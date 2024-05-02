@@ -12,6 +12,7 @@ use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Mockery\Exception;
 
 class Controller extends BaseController
@@ -41,12 +42,7 @@ class Controller extends BaseController
             ]);
 
             // Genera un código aleatorio de 6 cifras que combina letras y números //
-            $codigoAleatorio = '';
-            $longitud = 6;
-            $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            for ($i = 0; $i < $longitud; $i++) {
-                $codigoAleatorio .= $caracteres[rand(0, strlen($caracteres) - 1)];
-            }
+            $codigoAleatorio = Str::random(6);
 
             // Codificar el valor del rol al estar trabajando con 0/1 //
             $rolStatus = $request->input('rol') ? true : false;

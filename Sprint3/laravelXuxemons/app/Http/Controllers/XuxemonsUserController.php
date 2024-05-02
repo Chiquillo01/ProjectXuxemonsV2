@@ -51,7 +51,7 @@ class XuxemonsUserController extends Controller
             // $Xuxemons = Xuxemons::where('id', $xuxemonAleatorio->id)
             //     ->first();
 
-            // Si no exixte usuario retornara el error
+            // Si no exixte el xuxemon retornara el error
             if (!$xuxemonAleatorio) {
                 return response()->json(['message' => 'No se pudo encontrar Xuxemon', $xuxemonAleatorio], 404);
             }
@@ -66,14 +66,14 @@ class XuxemonsUserController extends Controller
                 // Crear el nuevo Xuxemon asociado al usuario
                 $nuevoXuxemonUsuario = new XuxemonsUser();
                 $nuevoXuxemonUsuario->xuxemon_id = $xuxemonAleatorio->id;
-                $nuevoXuxemonUsuario->user_id = $user->id;
+                $nuevoXuxemonUsuario->user_id = $user->idUser;
                 $nuevoXuxemonUsuario->tamano = $xuxemonAleatorio->tamano;
                 $nuevoXuxemonUsuario->evo1 = $xuxemonAleatorio->evo1;
                 $nuevoXuxemonUsuario->evo2 = $xuxemonAleatorio->evo2;
 
                 $nuevoXuxemonUsuario->save();
 
-            return response()->json(['message' => 'Nuevo Xuxemon creado con éxito'], 200);
+            return response()->json(['message' => 'Nuevo Xuxemon creado con éxito', $nuevoXuxemonUsuario, $user], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error al crear el nuevo Xuxemon: ' . $e->getMessage()], 500);
         }
@@ -114,7 +114,7 @@ class XuxemonsUserController extends Controller
                 ->get();
 
             // Retorna todos los xuxemons en forma json
-            return response()->json([$xuxemons, 200]);
+            return response()->json([$xuxemons, $user, 200]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Ha ocurrido un error al retornar los xuxemons: ' . $e->getMessage()], 500);
         }
@@ -139,7 +139,7 @@ class XuxemonsUserController extends Controller
             }
 
             // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
-            $xuxemons = XuxemonsUser::where('user_id', $user->id)
+            $xuxemons = XuxemonsUser::where('user_id', $user->idUser)
                 ->join('xuxemons', 'xuxemons_users.xuxemon_id', '=', 'xuxemons.id')
                 ->where('xuxemons_users.activo', 1)
                 ->select(
@@ -180,7 +180,7 @@ class XuxemonsUserController extends Controller
                 return response()->json(['message' => 'Usuario no encontrado', $user], 404);
             }
 
-            $xuxemonInfo = XuxemonsUser::where('user_id', $user->id)
+            $xuxemonInfo = XuxemonsUser::where('user_id', $user->idUser)
                 ->where('xuxemon_id', $xuxemon_id)
                 ->first();
 
@@ -221,7 +221,7 @@ class XuxemonsUserController extends Controller
                 return response()->json(['message' => 'Usuario no encontrado', $user], 404);
             }
 
-            $xuxemonInfo = XuxemonsUser::where('user_id', $user->id)
+            $xuxemonInfo = XuxemonsUser::where('user_id', $user->idUser)
                 ->where('xuxemon_id', $xuxemon_id)
                 ->first();
 
@@ -264,7 +264,7 @@ class XuxemonsUserController extends Controller
                 return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
             }
 
-            $xuxemonInfo = XuxemonsUser::where('user_id', $user->id)
+            $xuxemonInfo = XuxemonsUser::where('user_id', $user->idUser)
                 ->where('xuxemon_id', $xuxemon_id)
                 ->join('xuxemons', 'xuxemons_users.xuxemon_id', '=', 'xuxemons.id')
                 ->select(
@@ -276,7 +276,7 @@ class XuxemonsUserController extends Controller
                 )
                 ->first();
 
-            $chucheInfo = ChuchesUser::where('user_id', $user->id)
+            $chucheInfo = ChuchesUser::where('user_id', $user->idUser)
                 ->where('chuche_id', $chuche_id)
                 ->join('chuches', 'chuches_users.chuche_id', '=', 'chuches.id')
                 ->select(
@@ -297,7 +297,7 @@ class XuxemonsUserController extends Controller
                 }
 
                 // Actualizar el valor de comida en la tabla xuxemons_users dentro de la transacción
-                XuxemonsUser::where('user_id', $user->id)
+                XuxemonsUser::where('user_id', $user->idUser)
                     ->where('xuxemon_id', $xuxemon_id)
                     ->update(['comida' => $nuevaComida]);
 
@@ -308,7 +308,7 @@ class XuxemonsUserController extends Controller
                 // si el stack es 1 borra la chuche
                 // si el stack no es 1 le resta 1 a stack
                 if ($chucheUser->stack == 1) {
-                    ChuchesUser::where('user_id', $user->id)
+                    ChuchesUser::where('user_id', $user->idUser)
                         ->where('chuche_id', $chuche_id)
                         ->delete();
                 } else {

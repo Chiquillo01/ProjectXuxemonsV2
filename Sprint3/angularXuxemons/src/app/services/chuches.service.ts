@@ -90,18 +90,6 @@ export class ChuchesService {
     );
   }
 
-  actualizarHorario(userToken: string): Observable<any> {
-    const authToken = this.tokenService.getToken();
-    const headers = {
-      headers: { Authorization: `Bearer ${authToken}` },
-    };
-
-    return this.http.post<any>(
-      `http://127.0.0.1:8000/api/chuches/actualizarHorario/${userToken}`,
-      headers
-    );
-  }
-
   chucheUpdate(stack: any, id: any): Observable<any> {
     // Token de sesion //
     const authToken = this.tokenService.getToken();
