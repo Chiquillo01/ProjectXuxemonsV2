@@ -57,6 +57,7 @@ Route::get('/chuchesUser/{userId}', [ChuchesUserController::class, 'show']);
 // Rutas del usuario Usuario // 
 Route::post('/register', [Controller::class, 'register']);
 Route::post('/login', [Controller::class, 'login']);
+Route::get('/usuario/{userToken}', [Controller::class, 'show']);
 // ---------------------- //
 // ---------------------- //
 // Mostrar todas las enfermedades //
@@ -74,5 +75,9 @@ Route::post('/curar', [EnfermedadesUserController::class, 'curar']);
 // ---------------------- //
 // Crear peticion usuarios //
 Route::post('/usuarios', [ContactosController::class, 'crear']);
+// acceptar peticion usuarios //
+Route::post('/acceptar', [ContactosController::class, 'acceptar']);
+// Crear peticion usuarios //
+Route::post('/denegar', [ContactosController::class, 'denegar']);
 // Muestra solicitudes de amisatad del usuarios //
 Route::get('/showSolicitudes/{userId}', [ContactosController::class, 'showSolicitudes']);

@@ -105,4 +105,19 @@ class Controller extends BaseController
             return response()->json(['message' => 'Ha ocurrido un error al hacer login: ' . $e->getMessage()], 500);
         }
     }
+
+    public function show($userToken){
+        try {
+            // Obtener el usuario a partir del token proporcionado
+            $user = User::where('remember_token', $userToken)->get();
+
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no encontrado'], 404);
+            }
+
+            return response()->json($user, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Ha ocurrido un error al retornar las solicitudes: ' . $e->getMessage()], 500);
+        }
+    }
 }

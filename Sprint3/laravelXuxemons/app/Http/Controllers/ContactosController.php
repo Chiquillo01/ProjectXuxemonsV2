@@ -34,7 +34,7 @@ class ContactosController extends Controller
                 return response()->json(['message' => 'Usuario no encontrado', $user], 404);
             }
 
-            if($user->idUser == $searchUser){
+            if ($user->idUser == $searchUser) {
                 return response()->json(['message' => 'Es el mismo usuario', $user], 404);
             }
 
@@ -75,37 +75,111 @@ class ContactosController extends Controller
     }
 
     public function showSolicitudes(Request $request, $userToken)
-{
-    try {
-        // Obtener el usuario a partir del token proporcionado
-        $user = User::where('remember_token', $userToken)->first();
+    {
+        try {
+            // Obtener el usuario a partir del token proporcionado
+            $user = User::where('remember_token', $userToken)->first();
 
-        if (!$user) {
-            return response()->json(['message' => 'Usuario no encontrado'], 404);
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no encontrado'], 404);
+            }
+
+            // Realizar la consulta para obtener las solicitudes asociadas al usuario
+            $solicitudes = Contactos::where(function ($query) use ($user) {
+                $query->where('user1', $user->idUser)
+                    ->orWhere('user2', $user->idUser);
+            })
+                ->join('users', function ($join) {
+                    $join->on('contactos.user1', '=', 'users.idUser')
+                        ->orOn('contactos.user2', '=', 'users.idUser');
+                })
+                ->whereNotIn('users.idUser', [$user->idUser])
+                ->select(
+                    'contactos.*',
+                    'users.idUser',
+                    'users.nick'
+                )
+                ->get();
+
+
+            return response()->json($solicitudes, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Ha ocurrido un error al retornar las solicitudes: ' . $e->getMessage()], 500);
         }
-
-        // Realizar la consulta para obtener las solicitudes asociadas al usuario
-        $solicitudes = Contactos::where(function ($query) use ($user) {
-            $query->where('user1', $user->idUser)
-                  ->orWhere('user2', $user->idUser);
-        })
-        ->join('users', function ($join) {
-            $join->on('contactos.user1', '=', 'users.idUser')
-                 ->orOn('contactos.user2', '=', 'users.idUser');
-        })
-        ->whereNotIn('users.idUser', [$user->idUser])
-        ->select(
-            'contactos.*',
-            'users.idUser',
-            'users.nick'
-        )
-        ->get();
-
-
-        return response()->json($solicitudes, 200);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Ha ocurrido un error al retornar las solicitudes: ' . $e->getMessage()], 500);
     }
-}
 
+    public function acceptar(Request $request){
+        try{
+
+            // Obtener el token de usuario de la solicitud
+            $userToken = $request->input('token');
+            // Obtener el token de usuario de la solicitud
+            $searchUser = $request->input('searchUser');
+
+            // Obtener el usuario a partir del token proporcionado
+            $user = User::where('remember_token', $userToken)->first();
+
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no encontrado'], 404);
+            }
+
+            if ($user->idUser == $searchUser) {
+                return response()->json(['message' => 'Es el mismos usuario'], 404);
+            }
+
+            $actualizar = Contactos::where(function ($query) use ($user) {
+                $query->where('user1', $user->idUser)
+                    ->orWhere('user2', $user->idUser);
+            })
+            ->where(function ($query) use ($searchUser) {
+                $query->where('user1', $searchUser)
+                    ->orWhere('user2', $searchUser);
+            })
+            ->first();
+
+            $actualizar->estado = 2;
+            $actualizar->save();
+
+            return response()->json(['message'=> 'Se ha acceptado la solucitud' . $actualizar], 200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => 'Ha ocurrido un error al retornar las solicitudes: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function denegar(Request $request){
+        try{
+
+            // Obtener el token de usuario de la solicitud
+            $userToken = $request->input('token');
+            // Obtener el token de usuario de la solicitud
+            $searchUser = $request->input('searchUser');
+
+            // Obtener el usuario a partir del token proporcionado
+            $user = User::where('remember_token', $userToken)->first();
+
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no encontrado'], 404);
+            }
+
+            if ($user->idUser == $searchUser) {
+                return response()->json(['message' => 'Es el mismos usuario'], 404);
+            }
+
+            $actualizar = Contactos::where(function ($query) use ($user) {
+                $query->where('user1', $user->idUser)
+                    ->orWhere('user2', $user->idUser);
+            })
+            ->where(function ($query) use ($searchUser) {
+                $query->where('user1', $searchUser)
+                    ->orWhere('user2', $searchUser);
+            })
+            ->first();
+
+            $actualizar->estado = 3;
+            $actualizar->save();
+            return response()->json(['message'=> 'Se ha denegado la solucitud' . $actualizar], 200);
+        }catch (\Exception $e) {
+            return response()->json(['message' => 'Ha ocurrido un error al retornar las solicitudes: ' . $e->getMessage()], 500);
+        }
+    }
 }

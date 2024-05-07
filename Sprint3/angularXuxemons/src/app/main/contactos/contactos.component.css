@@ -59,6 +59,17 @@ input.buscador-input::placeholder{
     border: 2px solid rgb(255, 133, 249);
 }
 
+.ProfileUser{
+    display: flex;
+    background-color: rgb(44, 44, 44);
+    color: white;
+    border-radius: 20px;
+    align-items:end;
+    width: 250px;
+    border: 2px solid rgb(255, 133, 249);
+    flex-direction: column-reverse;
+}
+
 .Lista_Amigos {
     display: flex;
     background-color: rgb(44, 44, 44);
@@ -67,6 +78,7 @@ input.buscador-input::placeholder{
     align-items: baseline;
     width: 250px;
     border: 2px solid rgb(255, 133, 249);
+    flex-direction: column;
 }
 
 img{

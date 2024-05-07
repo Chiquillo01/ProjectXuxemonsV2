@@ -1,8 +1,9 @@
 export interface UsersRequest {
   id?: number;
-  idUser?: string;
+  idUser: string;
   user1: number;
   user2: number;
+  estado: number;
   nick:string;
   email: string;
   password: string;

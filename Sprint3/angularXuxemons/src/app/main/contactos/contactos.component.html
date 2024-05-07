@@ -6,24 +6,38 @@
 <body>
     <div class="contenido">
         <div class="Lista_Amigos">
-            <div class="user">
-                <img class="imagen" src="../../../assets/xuxemons/bambino.png">
-                <h4 class="nombre">Nombreeeeeeeeeeeeeeeeeeeeeeee</h4>
+            <div *ngFor="let amigos of Requests">
+                <div class="user" *ngIf="amigos.estado == 2">
+                    <img class="imagen" src="../../../assets/xuxemons/bambino.png">
+                    <h4 class="nombre">{{amigos.nick}}</h4>
+                </div>
+            </div>
+            <div class="ProfileUser">
+                <div *ngFor="let amigos of Users">
+                    <div class="user">
+                        <img class="imagen" src="../../../assets/xuxemons/bambino.png">
+                        <h4 class="nombre">{{amigos.nick}}</h4>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="Separador">
-            <form class="Buscador" [formGroup]="ContactosForm" (ngSubmit)="getUser()">
+            <form class="Buscador" [formGroup]="ContactosForm" (ngSubmit)="getUsers()">
                 <input class="buscador-input" formControlName="id" placeholder="Buscar Usuario . . .">
                 <button class="enviarSol" type="submit">Enviar Solicitud<div class=""></div></button>
             </form>
-            
+
             <h2>Solicitudes Pendientes</h2>
             <div class="Lista_Usuarios">
-                <div class="userSol" *ngFor="let request of Requests">
-                    <img class="imagen" src="../../../assets/xuxemons/bambino.png">
-                    <h4 class="nombre">{{ request.nick }}</h4>
-                    <button><img src="../../../assets/contactos/check-mark.png"  class="check" ></button>
-                    <button><img src="../../../assets/contactos/cross.png"  class="cross" ></button>
+                <div *ngFor="let request of Requests">
+                    <div class="userSol" *ngIf="request.estado == 1">
+                        <img class="imagen" src="../../../assets/xuxemons/bambino.png">
+                        <h4 class="nombre">{{ request.nick }}</h4>
+                        <button (click)="acceptar(request.idUser)"><img src="../../../assets/contactos/check-mark.png"
+                                class="check"></button>
+                        <button (click)="denegar(request.idUser)"><img src="../../../assets/contactos/cross.png"
+                                class="cross"></button>
+                    </div>
                 </div>
             </div>
         </div>
