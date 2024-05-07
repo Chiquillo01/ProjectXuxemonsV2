@@ -20,7 +20,7 @@ class EnfermedadesUserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request, $userToken, $enfermedad)
+    public function showInfoEnf($userToken, $enfermedad)
     {
         try {
             // Obtener el token de usuario de la solicitud

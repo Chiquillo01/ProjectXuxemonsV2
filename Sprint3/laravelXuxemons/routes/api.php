@@ -30,9 +30,9 @@ Route::put('/xuxemons/{xuxemon_id}/alimentar/{chuche_id}/user/{user_Id}', [Xuxem
 // Eliminar un xuxemon //
 Route::delete('/xuxemons/{xuxemons}', [XuxemonsController::class, 'destroy']);
 // Mostrar todos los xuxemons //
-Route::get('/xuxemons', [XuxemonsController::class, 'show']);
+Route::get('/xuxemons', [XuxemonsController::class, 'showXuxedex']);
 // Mostrar todos los xuxemons del usuario //
-Route::get('/xuxemonsUser/{userToken}', [XuxemonsUserController::class, 'show']);
+Route::get('/xuxemonsUser/{userToken}', [XuxemonsUserController::class, 'showXuxemons']);
 // Mostrar todos los xuxemons del usuario //
 Route::get('/xuxemonsUserActivos/{userId}', [XuxemonsUserController::class, 'showActivos']);
 // ---------------------- //
@@ -50,7 +50,7 @@ Route::post('/chuches/actualizarHorario/{userId}', [ChuchesUserController::class
 // Crear chuches aleatorias //
 Route::post('/chuches/random/{userId}', [ChuchesUserController::class, 'debug']);
 // Mostrar todas las xuxes del usuario //
-Route::get('/chuchesUser/{userId}', [ChuchesUserController::class, 'show']);
+Route::get('/chuchesUser/{userId}', [ChuchesUserController::class, 'showChuches']);
 // ---------------------- //
 // ---------------------- //
 
@@ -65,7 +65,7 @@ Route::get('/enfermedades/{userId}', [EnfermedadesUserController::class, 'showEn
 // Mostrar todos los xuxemons enfermos //
 Route::get('/xuxemonsEnfermosUser/{userId}', [EnfermedadesUserController::class, 'showEnfermos']);
 // Mostrar todos los xuxemons enfermos //
-Route::get('/enfermos/{userId}/{enfermedadId}', [EnfermedadesUserController::class, 'show']);
+Route::get('/enfermos/{userId}/{enfermedadId}', [EnfermedadesUserController::class, 'showInfoEnf']);
 // Actualizar alimentos xuxemon usuario //
 Route::put('/enfermar', [EnfermedadesUserController::class, 'enfermar']);
 // Actualizar alimentos xuxemon usuario //
@@ -81,3 +81,5 @@ Route::post('/acceptar', [ContactosController::class, 'acceptar']);
 Route::post('/denegar', [ContactosController::class, 'denegar']);
 // Muestra solicitudes de amisatad del usuarios //
 Route::get('/showSolicitudes/{userId}', [ContactosController::class, 'showSolicitudes']);
+// Muestra solicitudes de amisatad del usuarios //
+Route::get('/show/{userId}', [ContactosController::class, 'showFriends']);

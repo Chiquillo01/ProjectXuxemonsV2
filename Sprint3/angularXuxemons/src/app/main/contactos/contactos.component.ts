@@ -16,6 +16,7 @@ export class ContactosComponent implements OnInit {
   Users: Users[] = [];
   User: Users[] = [];
   Requests: UsersRequest[] = [];
+  Friends: UsersRequest[] = [];
   userRol!: number;
   ContactosForm: FormGroup;
   otherUserId: any;
@@ -63,6 +64,19 @@ export class ContactosComponent implements OnInit {
           console.error('Error fetching Xuxemons:', error);
         },
       });
+
+      this.ContactosService.getAllFriends(userToken).subscribe({
+        next: (friends: any[]) => {
+          // Cambia any por el tipo correcto si lo conoces
+          this.Friends = friends; // Asigna toda la matriz de solicitudes
+          console.log('Info request:');
+          console.log(friends); // Muestra toda la matriz en la consola
+        },
+        error: (error) => {
+          console.error('Error fetching Xuxemons:', error);
+        },
+      });
+
     }
   }
 
@@ -72,8 +86,8 @@ export class ContactosComponent implements OnInit {
 
     if (userToken !== null) {
       this.UsersService.getUsuario(userToken).subscribe({
-        next: (users: any[]) => {
-          this.Users = users;
+        next: (user: any[]) => {
+          this.User = user;
           this.getRequest();
         },
         error: (error) => {
@@ -96,6 +110,7 @@ export class ContactosComponent implements OnInit {
         next: (users: any) => {
           this.Users = users[0];
           this.getRequest();
+          this.getUser();
         },
         error: (error) => {
           console.error('Error fetching Xuxemons:', error);
@@ -117,6 +132,7 @@ export class ContactosComponent implements OnInit {
         next: (response: any) => {
           console.log(response.message);
           this.getRequest();
+          this.getUser();
         },
         error: (error) => {
           console.error('Error fetching Xuxemons:', error);
@@ -138,6 +154,7 @@ export class ContactosComponent implements OnInit {
         next: (response: any) => {
           console.log(response.message);
           this.getRequest();
+          this.getUser();
         },
         error: (error) => {
           console.error('Error fetching Xuxemons:', error);

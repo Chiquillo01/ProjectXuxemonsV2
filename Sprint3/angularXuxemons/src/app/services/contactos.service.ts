@@ -26,6 +26,19 @@ export class ContactosService {
     return this.http.post<Users[]>('http://127.0.0.1:8000/api/usuarios', body);
   }
 
+    /**
+   * Nombre: getAllChuchesUser
+   * Función: Obtener todas las chuches que tiene un usuario
+   * @returns la url de la api
+   */
+    getAllFriends(userToken: string): Observable<Users[]> {
+      //console.log(userToken, SearchUser);
+  
+      return this.http.get<Users[]>(
+        `http://127.0.0.1:8000/api/show/${userToken}`
+      );
+    }
+
   /**
    * Nombre: getAllChuchesUser
    * Función: Obtener todas las chuches que tiene un usuario

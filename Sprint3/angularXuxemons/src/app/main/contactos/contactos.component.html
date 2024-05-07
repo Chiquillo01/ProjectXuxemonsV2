@@ -6,18 +6,20 @@
 <body>
     <div class="contenido">
         <div class="Lista_Amigos">
-            <div *ngFor="let amigos of Requests">
+            <div *ngFor="let amigos of Friends">
                 <div class="user" *ngIf="amigos.estado == 2">
                     <img class="imagen" src="../../../assets/xuxemons/bambino.png">
                     <h4 class="nombre">{{amigos.nick}}</h4>
                 </div>
+                <h6 class="nombreId" *ngIf="amigos.estado == 2">Id: {{amigos.idUser}}</h6>
             </div>
             <div class="ProfileUser">
-                <div *ngFor="let amigos of Users">
+                <div *ngFor="let amigos of User">
                     <div class="user">
                         <img class="imagen" src="../../../assets/xuxemons/bambino.png">
                         <h4 class="nombre">{{amigos.nick}}</h4>
                     </div>
+                    <h6 class="nombreId">Id: {{amigos.idUser}}</h6>
                 </div>
             </div>
         </div>

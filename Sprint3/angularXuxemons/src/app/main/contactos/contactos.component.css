@@ -64,7 +64,7 @@ input.buscador-input::placeholder{
     background-color: rgb(44, 44, 44);
     color: white;
     border-radius: 20px;
-    align-items:end;
+    /* align-items:end; */
     width: 250px;
     border: 2px solid rgb(255, 133, 249);
     flex-direction: column-reverse;
@@ -150,6 +150,11 @@ button{
 .nombre{
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.nombreId{
+    display: flex;
+    align-content: column;
+    justify-content: center;
 }
 
 .imagen{

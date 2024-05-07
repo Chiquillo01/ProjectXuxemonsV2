@@ -171,7 +171,7 @@ class ChuchesUserController extends Controller
      * Nombre: show
      * Función: Enviar los datos para que se muestren en el frontend
      */
-    public function show(Request $request, $userToken)
+    public function showChuches(Request $request, $userToken)
     {
         try {
 

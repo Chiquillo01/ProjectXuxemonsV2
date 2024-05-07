@@ -63,15 +63,15 @@ class XuxemonsUserController extends Controller
             // else{
             //     return response()->json(['message' => 'Tiene el mismo tamaño'], 404);
             // }
-                // Crear el nuevo Xuxemon asociado al usuario
-                $nuevoXuxemonUsuario = new XuxemonsUser();
-                $nuevoXuxemonUsuario->xuxemon_id = $xuxemonAleatorio->id;
-                $nuevoXuxemonUsuario->user_id = $user->idUser;
-                $nuevoXuxemonUsuario->tamano = $xuxemonAleatorio->tamano;
-                $nuevoXuxemonUsuario->evo1 = $xuxemonAleatorio->evo1;
-                $nuevoXuxemonUsuario->evo2 = $xuxemonAleatorio->evo2;
+            // Crear el nuevo Xuxemon asociado al usuario
+            $nuevoXuxemonUsuario = new XuxemonsUser();
+            $nuevoXuxemonUsuario->xuxemon_id = $xuxemonAleatorio->id;
+            $nuevoXuxemonUsuario->user_id = $user->idUser;
+            $nuevoXuxemonUsuario->tamano = $xuxemonAleatorio->tamano;
+            $nuevoXuxemonUsuario->evo1 = $xuxemonAleatorio->evo1;
+            $nuevoXuxemonUsuario->evo2 = $xuxemonAleatorio->evo2;
 
-                $nuevoXuxemonUsuario->save();
+            $nuevoXuxemonUsuario->save();
 
             return response()->json(['message' => 'Nuevo Xuxemon creado con éxito', $nuevoXuxemonUsuario, $user], 200);
         } catch (\Exception $e) {
@@ -85,7 +85,7 @@ class XuxemonsUserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request, $userToken)
+    public function showXuxemons($userToken)
     {
         try {
 
@@ -300,10 +300,24 @@ class XuxemonsUserController extends Controller
                 XuxemonsUser::where('user_id', $user->idUser)
                     ->where('xuxemon_id', $xuxemon_id)
                     ->update(['comida' => $nuevaComida]);
+            });
+            DB::transaction(function () use ($userToken, $chuche_id) {
 
+                $user = User::where('remember_token', $userToken)
+                    ->first();
+
+                if (!$user) {
+                    // Manejar el caso donde no se encontró ningún usuario con el token proporcionado
+                    return response()->json(['message' => 'Usuario no encontrado', $user, $userToken], 404);
+                }
                 $chucheUser = ChuchesUser::where('user_id', $user->id)
                     ->where('chuche_id', $chuche_id)
                     ->first();
+
+                if (!$chucheUser) {
+                    // Manejar el caso donde no se encontró la chuche del usuario
+                    return response()->json(['message' => 'La chuche no fue encontrada para este usuario'], 404);
+                }
 
                 // si el stack es 1 borra la chuche
                 // si el stack no es 1 le resta 1 a stack
@@ -326,7 +340,7 @@ class XuxemonsUserController extends Controller
                 'cumpleEvo2' => $cumpleEvo2,
             ], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Ha ocurrido un error al actualizar los xuxemons: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Ha ocurrido un error al actualizar las chuches: ' . $e->getMessage()], 500);
         }
     }
 

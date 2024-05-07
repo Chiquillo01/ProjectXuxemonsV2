@@ -42,7 +42,7 @@ class XuxemonsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Xuxemons $xuxemons)
+    public function showXuxedex(Xuxemons $xuxemons)
     {
         try {
             $xuxemons = Xuxemons::all();
