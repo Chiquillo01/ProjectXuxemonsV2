@@ -98,7 +98,7 @@ class XuxemonsUserController extends Controller
             }
 
             // Realizar la consulta con un join para obtener los Xuxemons asociados al usuario
-            $xuxemons = XuxemonsUser::where('user_id', $user->id)
+            $xuxemons = XuxemonsUser::where('user_id', $user->idUser)
                 ->join('xuxemons', 'xuxemons_users.xuxemon_id', '=', 'xuxemons.id')
                 ->where('xuxemons_users.activo', 0)
                 ->select(

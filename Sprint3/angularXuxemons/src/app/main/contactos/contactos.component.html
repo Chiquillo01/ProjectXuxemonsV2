@@ -8,11 +8,24 @@
         <div class="Lista_Amigos">
             <div class="user">
                 <img class="imagen" src="../../../assets/xuxemons/bambino.png">
-                <h4 class="nombre">Nombreeeeeeeeeeeeeeeeeee</h4>
+                <h4 class="nombre">Nombreeeeeeeeeeeeeeeeeeeeeeee</h4>
             </div>
         </div>
-        <form class="Buscador">
-            <input class="buscador-input" placeholder="Buscar Usuario . . .">
-        </form>
+        <div class="Separador">
+            <form class="Buscador" [formGroup]="ContactosForm" (ngSubmit)="getUser()">
+                <input class="buscador-input" formControlName="id" placeholder="Buscar Usuario . . .">
+                <button class="enviarSol" type="submit">Enviar Solicitud<div class=""></div></button>
+            </form>
+            
+            <h2>Solicitudes Pendientes</h2>
+            <div class="Lista_Usuarios">
+                <div class="userSol" *ngFor="let request of Requests">
+                    <img class="imagen" src="../../../assets/xuxemons/bambino.png">
+                    <h4 class="nombre">{{ request.nick }}</h4>
+                    <button><img src="../../../assets/contactos/check-mark.png"  class="check" ></button>
+                    <button><img src="../../../assets/contactos/cross.png"  class="cross" ></button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>

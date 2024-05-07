@@ -6,6 +6,7 @@ use \App\Http\Controllers\Controller;
 use \App\Http\Controllers\XuxemonsController;
 use \App\Http\Controllers\XuxemonsUserController;
 use App\Http\Controllers\ChuchesUserController;
+use App\Http\Controllers\ContactosController;
 use App\Http\Controllers\EnfermedadesUserController;
 
 // Rutas para los Xuxemons // 
@@ -69,3 +70,9 @@ Route::put('/enfermar', [EnfermedadesUserController::class, 'enfermar']);
 // Actualizar alimentos xuxemon usuario //
 Route::put('/xuxemons/{xuxemon_id}/alimentar/{chuche_id}/user/{user_Id}', [XuxemonsUserController::class, 'alimentar']);
 Route::post('/curar', [EnfermedadesUserController::class, 'curar']);
+// ---------------------- //
+// ---------------------- //
+// Crear peticion usuarios //
+Route::post('/usuarios', [ContactosController::class, 'crear']);
+// Muestra solicitudes de amisatad del usuarios //
+Route::get('/showSolicitudes/{userId}', [ContactosController::class, 'showSolicitudes']);
