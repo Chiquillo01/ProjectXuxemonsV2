@@ -7,6 +7,7 @@ export interface UsersRequest {
   nick:string;
   email: string;
   password: string;
+  imagen: string;
   rol: number;
   rememberToken?: string;
   created_at?: string;

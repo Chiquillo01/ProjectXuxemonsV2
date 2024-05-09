@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('user1');
             $table->string('user2');
             $table->integer('estado');
+            $table->longText('mensajes');
             $table->timestamps();
         });
     }

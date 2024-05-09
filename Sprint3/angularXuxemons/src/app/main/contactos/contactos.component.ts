@@ -5,6 +5,7 @@ import { ContactosService } from '../../services/contactos.service';
 import { UsersService } from '../../services/users.service';
 import { Users } from '../../models/users/users.model';
 import { UsersRequest } from '../../models/usersRequest/usersRequest.model';
+import { Chat } from '../../models/chat/chat.model';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -17,36 +18,110 @@ export class ContactosComponent implements OnInit {
   User: Users[] = [];
   Requests: UsersRequest[] = [];
   Friends: UsersRequest[] = [];
+  Chat: Chat[] = [];
   userRol!: number;
   ContactosForm: FormGroup;
   otherUserId: any;
+  openChat = false;
 
   constructor(
     private fb: FormBuilder,
     private tokenService: TokenService,
     private ContactosService: ContactosService,
     private UsersService: UsersService,
-    private router: Router,
     private route: ActivatedRoute
   ) {
     this.ContactosForm = this.fb.group({
       id: ['', Validators.required],
+      texto: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
     this.getUser();
     this.getRequest();
+    // this.mensajesUsers();
     this.route.queryParams.subscribe((params) => {
       this.otherUserId = {
         id: params['id'],
+        texto: params['texto'],
       };
     });
 
-    // Seteamos los valores //
-    this.ContactosForm.setValue({
-      id: this.otherUserId.id || '',
+    // Seteamos los valores
+    this.ContactosForm.patchValue({
+      id: this.otherUserId?.id || '',
+      texto: this.otherUserId?.texto || '',
     });
+  }
+
+  openChatUser(idUser: string) {
+    this.openChat = true;
+    this.getMensajesUsers(idUser);
+  }
+
+  mostrarUserInfo(mensaje: any, index: number): boolean {
+    if (index > 0) {
+      const mensajeActual = mensaje[index];
+      const mensajeAnterior = mensaje[index - 1];
+
+      // Extraer la hora y el minuto de las fechas
+      const horaMinutoActual =
+        new Date(mensajeActual.created_at).getHours() +
+        ':' +
+        new Date(mensajeActual.created_at).getMinutes();
+      const horaMinutoAnterior =
+        new Date(mensajeAnterior.created_at).getHours() +
+        ':' +
+        new Date(mensajeAnterior.created_at).getMinutes();
+
+      if (
+        mensajeActual.usuario === mensajeAnterior.usuario && // Misma persona
+        horaMinutoActual === horaMinutoAnterior // Misma hora y minuto
+      ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  mostrarDateInfo(created_at: string): string {
+    const mensajeFecha = new Date(created_at);
+    const hoy = new Date();
+
+    // Obtener la fecha de ayer
+    const ayer = new Date(hoy);
+    ayer.setDate(hoy.getDate() - 1);
+    ayer.setHours(0, 0, 0, 0); // Establecer la hora a las 00:00:00 para una comparación precisa
+
+    if (mensajeFecha.getDate() === hoy.getDate()) {
+      // El mensaje fue enviado hoy
+      return (
+        'Hoy ' +
+        mensajeFecha.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      );
+    } else if (mensajeFecha.getTime() >= ayer.getTime()) {
+      // El mensaje fue enviado ayer
+      return (
+        'Ayer ' +
+        mensajeFecha.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      );
+    } else {
+      // El mensaje fue enviado hace más de un día
+      return mensajeFecha.toLocaleString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
   }
 
   getRequest() {
@@ -61,7 +136,7 @@ export class ContactosComponent implements OnInit {
           console.log(requests); // Muestra toda la matriz en la consola
         },
         error: (error) => {
-          console.error('Error fetching Xuxemons:', error);
+          console.error('Error error al enviar la solicitud:', error);
         },
       });
 
@@ -73,15 +148,14 @@ export class ContactosComponent implements OnInit {
           console.log(friends); // Muestra toda la matriz en la consola
         },
         error: (error) => {
-          console.error('Error fetching Xuxemons:', error);
+          console.error('Error al obtener todos los amigos:', error);
         },
       });
-
     }
   }
 
   // getUsuario
-  getUser(){
+  getUser() {
     const userToken = this.tokenService.getToken();
 
     if (userToken !== null) {
@@ -91,7 +165,7 @@ export class ContactosComponent implements OnInit {
           this.getRequest();
         },
         error: (error) => {
-          console.error('Error fetching Xuxemons:', error);
+          console.error('Error al obtener tu usuario:', error);
         },
       });
     } else {
@@ -108,12 +182,13 @@ export class ContactosComponent implements OnInit {
     if (userToken !== null && id !== null) {
       this.ContactosService.getAllUsers(userToken, id).subscribe({
         next: (users: any) => {
+          alert('Solicitud enviada');
           this.Users = users[0];
           this.getRequest();
           this.getUser();
         },
         error: (error) => {
-          console.error('Error fetching Xuxemons:', error);
+          console.error('Error al enviar la solicitud:', error);
         },
       });
     } else {
@@ -130,12 +205,13 @@ export class ContactosComponent implements OnInit {
     if (userToken !== null && id !== null) {
       this.ContactosService.acceptar(userToken, id).subscribe({
         next: (response: any) => {
+          alert('Tienes un nuevo amigo');
           console.log(response.message);
           this.getRequest();
           this.getUser();
         },
         error: (error) => {
-          console.error('Error fetching Xuxemons:', error);
+          console.error('Error al acceptar:', error);
         },
       });
     } else {
@@ -152,12 +228,72 @@ export class ContactosComponent implements OnInit {
     if (userToken !== null && id !== null) {
       this.ContactosService.denegar(userToken, id).subscribe({
         next: (response: any) => {
+          alert('No quiero amigos solo Xuxemons');
           console.log(response.message);
           this.getRequest();
           this.getUser();
         },
         error: (error) => {
-          console.error('Error fetching Xuxemons:', error);
+          console.error('Error al denegar:', error);
+        },
+      });
+    } else {
+      console.error('User ID is null');
+    }
+  }
+
+  getMensajesUsers(idUser: string) {
+    const userToken = this.tokenService.getToken();
+    // const idUser = "AAAAA1";
+
+    if (userToken !== null) {
+      this.ContactosService.getAllChat(userToken, idUser).subscribe({
+        next: (chat: any[]) => {
+          // Cambia any por el tipo correcto si lo conoces
+          this.Chat = chat; // Asigna toda la matriz de solicitudes
+          console.log('Info chat:');
+          console.log(chat); // Muestra toda la matriz en la consola
+        },
+        error: (error) => {
+          console.error('Error en el chat:', error);
+        },
+      });
+    }
+  }
+
+  // Esta función convierte la cadena de mensajes JSON en un objeto JavaScript
+  parseMensajes(mensajesString: string): any[] {
+    try {
+      console.log('Mensaje:');
+      console.log(mensajesString);
+      if (!mensajesString) {
+        return []; // O devuelve un valor predeterminado adecuado si es necesario
+      }
+      return JSON.parse(mensajesString);
+    } catch (error) {
+      console.error('Error al analizar mensajes JSON:', error);
+      return []; // O devuelve un valor predeterminado adecuado si es necesario
+    }
+  }
+
+  guardarMensajes(id2: string) {
+    const userToken = this.tokenService.getToken();
+    const texto = this.ContactosForm.get('texto')?.value; // Obtén el valor del control 'texto'
+    console.log('userToken getChuches: ' + userToken);
+    console.log('Id del usuario1:', userToken);
+    console.log('Id del usuario2:', id2);
+    console.log('Texto:', texto);
+
+    if (userToken !== null && id2 !== null && texto !== null && texto !== '') {
+      this.ContactosService.guardarMensajes(userToken, id2, texto).subscribe({
+        next: (response: any) => {
+          // alert('Tienes un nuevo amigo');
+          // console.log(response.message);
+          this.ContactosForm.reset();
+          this.getMensajesUsers(id2);
+        },
+        error: (error) => {
+          console.error('Error al aceptar:', error);
         },
       });
     } else {

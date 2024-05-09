@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { TokenService } from '../services/token.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Users } from '../models/users/users.model';
+import { Chat } from '../models/chat/chat.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,18 +27,18 @@ export class ContactosService {
     return this.http.post<Users[]>('http://127.0.0.1:8000/api/usuarios', body);
   }
 
-    /**
+  /**
    * Nombre: getAllChuchesUser
    * Función: Obtener todas las chuches que tiene un usuario
    * @returns la url de la api
    */
-    getAllFriends(userToken: string): Observable<Users[]> {
-      //console.log(userToken, SearchUser);
-  
-      return this.http.get<Users[]>(
-        `http://127.0.0.1:8000/api/show/${userToken}`
-      );
-    }
+  getAllFriends(userToken: string): Observable<Users[]> {
+    //console.log(userToken, SearchUser);
+
+    return this.http.get<Users[]>(
+      `http://127.0.0.1:8000/api/show/${userToken}`
+    );
+  }
 
   /**
    * Nombre: getAllChuchesUser
@@ -84,4 +85,33 @@ export class ContactosService {
     return this.http.post<Users[]>('http://127.0.0.1:8000/api/denegar', body);
   }
 
+  /**
+   * Nombre: getAllChat
+   * Función: Obtener todas las chuches que tiene un usuario
+   * @returns la url de la api
+   */
+  getAllChat(userToken: string, idUser: string): Observable<Chat[]> {
+    //console.log(userToken, SearchUser);
+
+    return this.http.get<Chat[]>(
+      `http://127.0.0.1:8000/api/show/${userToken}/&/${idUser}`
+    );
+  }
+
+  /**
+   * Nombre: denegar
+   * Función: Obtener todas las chuches que tiene un usuario
+   * @returns la url de la api
+   */
+  guardarMensajes(userToken: string, SearchUser: string, Texto:string): Observable<Users[]> {
+    //console.log(userToken, SearchUser);
+
+    const body = {
+      token: userToken,
+      searchUser: SearchUser,
+      text: Texto
+    };
+
+    return this.http.post<Users[]>('http://127.0.0.1:8000/api/mensaje', body);
+  }
 }

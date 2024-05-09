@@ -7,16 +7,18 @@
     <div class="contenido">
         <div class="Lista_Amigos">
             <div *ngFor="let amigos of Friends">
-                <div class="user" *ngIf="amigos.estado == 2">
-                    <img class="imagen" src="../../../assets/xuxemons/bambino.png">
-                    <h4 class="nombre">{{amigos.nick}}</h4>
-                </div>
-                <h6 class="nombreId" *ngIf="amigos.estado == 2">Id: {{amigos.idUser}}</h6>
+                <button class="botonChat" (click)="openChatUser(amigos.idUser)">
+                    <div class="user" *ngIf="amigos.estado == 2">
+                        <img class="imagen" src={{amigos.imagen}}>
+                        <h4 class="nombre">{{amigos.nick}}</h4>
+                    </div>
+                    <h6 class="nombreId" *ngIf="amigos.estado == 2">Id: {{amigos.idUser}}</h6>
+                </button>
             </div>
             <div class="ProfileUser">
                 <div *ngFor="let amigos of User">
                     <div class="user">
-                        <img class="imagen" src="../../../assets/xuxemons/bambino.png">
+                        <img class="imagen" src={{amigos.imagen}}>
                         <h4 class="nombre">{{amigos.nick}}</h4>
                     </div>
                     <h6 class="nombreId">Id: {{amigos.idUser}}</h6>
@@ -30,7 +32,7 @@
             </form>
 
             <h2>Solicitudes Pendientes</h2>
-            <div class="Lista_Usuarios">
+            <div>
                 <div *ngFor="let request of Requests">
                     <div class="userSol" *ngIf="request.estado == 1">
                         <img class="imagen" src="../../../assets/xuxemons/bambino.png">
@@ -41,6 +43,35 @@
                                 class="cross"></button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="chat-container">
+            <div *ngFor="let chat of Chat">
+                <div class="message" *ngIf="openChat">
+                    <div *ngFor="let mensaje of parseMensajes(chat.mensajes); let i = index" class="message-content">
+                        <div class="user-info" *ngIf="mostrarUserInfo(parseMensajes(chat.mensajes), i)">
+                            <img class="user-image" [src]="mensaje.imagen">
+                            <h4 class="user-name">{{ mensaje.nick }}
+                                <p class="message-time">{{ mostrarDateInfo(mensaje.created_at) }}</p>
+                            </h4>
+                        </div>
+                        <div class="message-info">
+                            <p class="message-text">{{ mensaje.mensaje }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="Buscador" [formGroup]="ContactosForm" (ngSubmit)="guardarMensajes(chat.idUser)">
+                    <input class="buscador-input" formControlName="texto" placeholder="Enviar mensaje a @{{chat.nick}}">
+                    <button class="enviarMensaje" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48">
+                            <g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="4">
+                                <path d="M43 5L29.7 43l-7.6-17.1L5 18.3z" />
+                                <path stroke-linecap="round" d="M43 5L22.1 25.9" />
+                            </g>
+                        </svg>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
