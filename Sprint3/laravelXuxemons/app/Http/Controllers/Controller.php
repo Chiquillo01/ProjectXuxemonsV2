@@ -120,4 +120,28 @@ class Controller extends BaseController
             return response()->json(['message' => 'Ha ocurrido un error al retornar las solicitudes: ' . $e->getMessage()], 500);
         }
     }
+
+    public function saveImg(Request $request){
+        try {
+
+            // Obtener el token de usuario de la solicitud
+            $userToken = $request->input('token');
+            // Obtener el token de usuario de la solicitud
+            $img = $request->input('imagen');
+
+            // Obtener el usuario a partir del token proporcionado
+            $user = User::where('remember_token', $userToken)->first();
+
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no encontrado'], 404);
+            }
+
+            $user->imagen = $img;
+            $user->save();
+            return response()->json(['message' => 'Se ha denegado la solucitud' . $actualizar], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Ha ocurrido un error al retornar las solicitudes: ' . $e->getMessage()], 500);
+        }
+    }
+
 }

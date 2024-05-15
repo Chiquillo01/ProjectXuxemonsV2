@@ -58,6 +58,7 @@ Route::get('/chuchesUser/{userId}', [ChuchesUserController::class, 'showChuches'
 Route::post('/register', [Controller::class, 'register']);
 Route::post('/login', [Controller::class, 'login']);
 Route::get('/usuario/{userToken}', [Controller::class, 'show']);
+Route::post('/subirImagen', [Controller::class, 'saveImg']);
 // ---------------------- //
 // ---------------------- //
 // Mostrar todas las enfermedades //

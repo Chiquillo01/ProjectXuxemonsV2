@@ -22,4 +22,14 @@ export class UsersService {
 
     return this.http.get<Users[]>(`http://127.0.0.1:8000/api/usuario/${userToken}`);
   }
+
+  saveImage(userToken:string, img: string): Observable<any> {
+    
+    const body = {
+      token: userToken,
+      imagen: img
+    };
+    
+    return this.http.post('http://127.0.0.1:8000/api/subirImagen', img);
+  }
 }

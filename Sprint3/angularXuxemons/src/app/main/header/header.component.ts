@@ -21,13 +21,4 @@ export class HeaderComponent {
   ) {
     this.userRole = this.tokenService ? this.tokenService.getRole() : null;
   }
-
-  logout() {
-    // Elimina el token de autenticación y el rol del usuario del localStorage
-    this.tokenService.removeToken();
-    this.tokenService.removeRole();
-
-    // Redirige a la página de inicio de sesión
-    this.router.navigate(['/landingPage']);
-  }
 }

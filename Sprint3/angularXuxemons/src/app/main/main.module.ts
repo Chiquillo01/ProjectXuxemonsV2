@@ -20,6 +20,7 @@ import { AlimentarComponent } from './xuxemons/caja/alimentar/alimentar.componen
 import { ObjetosComponent } from './inventario/objetos/objetos.component';
 import { CurarComponent } from './inventario/objetos/curar/curar/curar.component';
 import { ContactosComponent } from './contactos/contactos.component';
+import { ProfileUserComponent } from './profile-user/profile-user.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,8 @@ const routes: Routes = [
       { path: 'home/xuxemons/xuxedex/editar', component: EditarComponent },
       { path: 'home/xuxemons/caja', component: CajaComponent },
       { path: 'home/xuxemons/caja/alimentar', component: AlimentarComponent },
+      { path: 'profile', component: ProfileUserComponent },
+
 
       // { path: 'footer', component: FooterComponent },
       // { path: 'header', component: HeaderComponent },
@@ -80,6 +83,7 @@ const routes: Routes = [
     AlimentarComponent,
     CurarComponent,
     ContactosComponent,
+    ProfileUserComponent,
   ],
 })
 export class MainModule {}
