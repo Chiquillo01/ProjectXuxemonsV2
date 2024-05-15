@@ -20,6 +20,7 @@ import { FooterComponent } from './main/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { LandingComponent } from './landing/landing.component';
 import { ContactosComponent } from './main/contactos/contactos.component';
+import { IntercambioComponent } from './main/intercambio/intercambio.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ContactosComponent } from './main/contactos/contactos.component';
     HeaderComponent,
     FooterComponent,
     LandingComponent,
+    IntercambioComponent
     // ContactosComponent,
   ],
   imports: [

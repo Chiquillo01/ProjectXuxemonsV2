@@ -21,6 +21,7 @@ import { ObjetosComponent } from './inventario/objetos/objetos.component';
 import { CurarComponent } from './inventario/objetos/curar/curar/curar.component';
 import { ContactosComponent } from './contactos/contactos.component';
 import { ProfileUserComponent } from './profile-user/profile-user.component';
+import { IntercambioComponent } from './intercambio/intercambio.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,7 @@ const routes: Routes = [
       { path: 'home/inventario/objetos/curar', component: CurarComponent },
       { path: 'home/tienda', component: TiendaComponent },
       { path: 'home/amigos', component: ContactosComponent },
+      { path: 'home/intercambio', component: IntercambioComponent },
       { path: 'home/xuxemons', component: XuxemonsComponent },
       { path: 'home/xuxemons/xuxedex', component: XuxedexComponent },
       { path: 'home/xuxemons/xuxedex/crear', component: CrearComponent },
@@ -84,6 +86,7 @@ const routes: Routes = [
     CurarComponent,
     ContactosComponent,
     ProfileUserComponent,
+    // IntercambioComponent,
   ],
 })
 export class MainModule {}

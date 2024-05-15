@@ -13,6 +13,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './contactos.component.html',
   styleUrls: ['./contactos.component.css'],
 })
+
 export class ContactosComponent implements OnInit {
   Users: Users[] = [];
   User: Users[] = [];
@@ -29,7 +30,8 @@ export class ContactosComponent implements OnInit {
     private tokenService: TokenService,
     private ContactosService: ContactosService,
     private UsersService: UsersService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.ContactosForm = this.fb.group({
       id: ['', Validators.required],
@@ -299,5 +301,9 @@ export class ContactosComponent implements OnInit {
     } else {
       console.error('User ID is null');
     }
+  }
+
+  intercambio(){
+    this.router.navigate(['/home/home/intercambio'], { queryParams: {} });
   }
 }

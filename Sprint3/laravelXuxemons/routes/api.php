@@ -88,3 +88,7 @@ Route::get('/showSolicitudes/{userId}', [ContactosController::class, 'showSolici
 Route::get('/show/{userId}', [ContactosController::class, 'showFriends']);
 // Muestra el chat //
 Route::get('/show/{userToken}/&/{idUser}', [ContactosController::class, 'showChat']);
+// ---------------------- //
+// ---------------------- //
+// Crear peticion usuarios //
+Route::post('/solicitudIntercambio', [ContactosController::class, 'crear']);

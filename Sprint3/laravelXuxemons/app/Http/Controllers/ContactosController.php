@@ -71,6 +71,7 @@ class ContactosController extends Controller
                     $nuevoContacto = new Contactos();
                     $nuevoContacto->user1 = $user->idUser;
                     $nuevoContacto->user2 = $buscarUser->idUser;
+                    $nuevoContacto->mensajes = "";
                     $nuevoContacto->estado = 1;
                     $nuevoContacto->save();
                 }
@@ -137,7 +138,8 @@ class ContactosController extends Controller
                 ->select(
                     'contactos.*',
                     'users.idUser',
-                    'users.nick'
+                    'users.nick',
+                    'users.imagen'
                 )
                 ->get();
 
