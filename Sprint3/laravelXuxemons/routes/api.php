@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\chatController;
 use Illuminate\Support\Facades\Route;
 // Controladores //
 use \App\Http\Controllers\Controller;
@@ -92,3 +93,5 @@ Route::get('/show/{userToken}/&/{idUser}', [ContactosController::class, 'showCha
 // ---------------------- //
 // Crear peticion usuarios //
 Route::post('/solicitudIntercambio', [ContactosController::class, 'crear']);
+
+Route::post('/messages', [chatController::class, 'message']);

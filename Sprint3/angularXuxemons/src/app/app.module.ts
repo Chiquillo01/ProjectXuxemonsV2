@@ -37,7 +37,7 @@ import { IntercambioComponent } from './main/intercambio/intercambio.component';
     HeaderComponent,
     FooterComponent,
     LandingComponent,
-    IntercambioComponent
+    IntercambioComponent,
     // ContactosComponent,
   ],
   imports: [
