@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Database\Eloquent\PendingHasThroughRelationship;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Events\Message;
 use App\Models\Contactos;
 use Illuminate\Support\Facades\Log;
 
@@ -264,15 +265,12 @@ class ContactosController extends Controller
 
     public function guardarMensaje(Request $request)
     {
-
         // Obtener el token de usuario de la solicitud
         $usertoken = $request->input('token');
-        // Obtener el token de usuario de la solicitud
+        // Obtener el ID del usuario receptor de la solicitud
         $user2 = $request->input('searchUser');
-        // Obtener el token de usuario de la solicitud
+        // Obtener el mensaje de la solicitud
         $mensaje = $request->input('text');
-
-        
 
         // Obtener el usuario a partir del token proporcionado
         $user = User::where('remember_token', $usertoken)->first();
@@ -301,5 +299,10 @@ class ContactosController extends Controller
         ];
         $contacto->mensajes = json_encode($mensajes);
         $contacto->save();
+
+        // Emitir el evento con el nuevo mensaje
+        event(new Message($user1));
+
+        return response()->json(['message' => 'Mensaje guardado correctamente'], 200);
     }
 }

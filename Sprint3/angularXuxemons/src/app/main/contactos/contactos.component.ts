@@ -7,22 +7,26 @@ import { Users } from '../../models/users/users.model';
 import { UsersRequest } from '../../models/usersRequest/usersRequest.model';
 import { Chat } from '../../models/chat/chat.model';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import Pusher from 'pusher-js';
 
 @Component({
   selector: 'app-contactos',
   templateUrl: './contactos.component.html',
   styleUrls: ['./contactos.component.css'],
 })
-
 export class ContactosComponent implements OnInit {
   Users: Users[] = [];
   User: Users[] = [];
   Requests: UsersRequest[] = [];
   Friends: UsersRequest[] = [];
   Chat: Chat[] = [];
+  idUserDos: string = '';
   userRol!: number;
   ContactosForm: FormGroup;
   otherUserId: any;
+  message: string = '';
+  messages: any[] = [];
   openChat = false;
 
   constructor(
@@ -31,7 +35,8 @@ export class ContactosComponent implements OnInit {
     private ContactosService: ContactosService,
     private UsersService: UsersService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.ContactosForm = this.fb.group({
       id: ['', Validators.required],
@@ -40,6 +45,21 @@ export class ContactosComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    Pusher.logToConsole = true;
+
+    const pusher = new Pusher('070f21dbf126b2a0113c', {
+      cluster: 'eu',
+    });
+
+    //revisar para que no se dupliquen los chats
+    const channel = pusher.subscribe('chat');
+    channel.bind('message', (data: any) => {
+      // data.mensajes.forEach((msg: any) => {
+        // this.messages.push(msg);
+        this.getMensajesUsers(this.idUserDos)
+      // });
+    });
+
     this.getUser();
     this.getRequest();
     // this.mensajesUsers();
@@ -59,14 +79,17 @@ export class ContactosComponent implements OnInit {
 
   openChatUser(idUser: string) {
     this.openChat = true;
+    console.log(this.openChat);
+    this.chatVivo(idUser);
     this.getMensajesUsers(idUser);
+    this.idUserDos = idUser;
   }
 
   mostrarUserInfo(mensaje: any, index: number): boolean {
-    if (index > 0) {
+    if (index > 0 && mensaje && mensaje[index] && mensaje[index - 1]) {
       const mensajeActual = mensaje[index];
       const mensajeAnterior = mensaje[index - 1];
-
+  
       // Extraer la hora y el minuto de las fechas
       const horaMinutoActual =
         new Date(mensajeActual.created_at).getHours() +
@@ -76,7 +99,7 @@ export class ContactosComponent implements OnInit {
         new Date(mensajeAnterior.created_at).getHours() +
         ':' +
         new Date(mensajeAnterior.created_at).getMinutes();
-
+  
       if (
         mensajeActual.usuario === mensajeAnterior.usuario && // Misma persona
         horaMinutoActual === horaMinutoAnterior // Misma hora y minuto
@@ -86,6 +109,7 @@ export class ContactosComponent implements OnInit {
     }
     return true;
   }
+  
 
   mostrarDateInfo(created_at: string): string {
     const mensajeFecha = new Date(created_at);
@@ -253,8 +277,8 @@ export class ContactosComponent implements OnInit {
         next: (chat: any[]) => {
           // Cambia any por el tipo correcto si lo conoces
           this.Chat = chat; // Asigna toda la matriz de solicitudes
-          console.log('Info chat:');
-          console.log(chat); // Muestra toda la matriz en la consola
+          // console.log('Info chat:');
+          // console.log(chat); // Muestra toda la matriz en la consola
         },
         error: (error) => {
           console.error('Error en el chat:', error);
@@ -266,8 +290,8 @@ export class ContactosComponent implements OnInit {
   // Esta función convierte la cadena de mensajes JSON en un objeto JavaScript
   parseMensajes(mensajesString: string): any[] {
     try {
-      console.log('Mensaje:');
-      console.log(mensajesString);
+      // console.log('Mensaje:');
+      // console.log(mensajesString);
       if (!mensajesString) {
         return []; // O devuelve un valor predeterminado adecuado si es necesario
       }
@@ -280,30 +304,45 @@ export class ContactosComponent implements OnInit {
 
   guardarMensajes(id2: string) {
     const userToken = this.tokenService.getToken();
-    const texto = this.ContactosForm.get('texto')?.value; // Obtén el valor del control 'texto'
-    console.log('userToken getChuches: ' + userToken);
-    console.log('Id del usuario1:', userToken);
-    console.log('Id del usuario2:', id2);
-    console.log('Texto:', texto);
+    const texto = this.ContactosForm.get('texto')?.value;
 
     if (userToken !== null && id2 !== null && texto !== null && texto !== '') {
       this.ContactosService.guardarMensajes(userToken, id2, texto).subscribe({
         next: (response: any) => {
-          // alert('Tienes un nuevo amigo');
-          // console.log(response.message);
           this.ContactosForm.reset();
-          this.getMensajesUsers(id2);
         },
         error: (error) => {
           console.error('Error al aceptar:', error);
         },
       });
+      // this.chatVivo(id2);
     } else {
       console.error('User ID is null');
     }
   }
 
-  intercambio(){
+  chatVivo(id2: string) {
+    const userToken = this.tokenService.getToken();
+    // console.log('http://localhost:8000/api/messages', {
+    //   userName: userToken,
+    //   searchUser: id2,
+    // });
+    //la idea es que se muestre primero el historial y luego lo que tu escribes
+    if (userToken) {
+      this.ContactosService.liveChat(userToken, id2).subscribe({
+        next: (response: any) => {
+          this.message = '';
+        },
+      });
+    }
+    // this.ContactosService.liveChat(userToken, texto).subscribe({
+    //   next: (response: any) => {
+    //     this.getMensajesUsers(id2);
+    //   },
+    // });
+  }
+
+  intercambio() {
     this.router.navigate(['/home/home/intercambio'], { queryParams: {} });
   }
 }

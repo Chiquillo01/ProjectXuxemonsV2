@@ -15,8 +15,9 @@ class Message implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     // public $message;
-
-    public function __construct(public string $message, public string $userName)
+    //codigo antiguo
+    // public function __construct(public string  $mensajes, public string $user_id, public string $created_at, public string $nick)
+    public function __construct(public string  $mensajes)
     {
         // $this->message = $message;
     }

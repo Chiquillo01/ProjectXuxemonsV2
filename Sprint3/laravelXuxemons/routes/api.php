@@ -82,7 +82,7 @@ Route::post('/acceptar', [ContactosController::class, 'acceptar']);
 // Crear peticion usuarios //
 Route::post('/denegar', [ContactosController::class, 'denegar']);
 // Crear peticion usuarios //
-Route::post('/mensaje', [ContactosController::class, 'guardarMensaje']);
+Route::post('/guardarmensaje', [ContactosController::class, 'guardarMensaje']);
 // Muestra solicitudes de amisatad del usuarios //
 Route::get('/showSolicitudes/{userId}', [ContactosController::class, 'showSolicitudes']);
 // Muestra los amigos del usuario //
@@ -92,6 +92,6 @@ Route::get('/show/{userToken}/&/{idUser}', [ContactosController::class, 'showCha
 // ---------------------- //
 // ---------------------- //
 // Crear peticion usuarios //
-Route::post('/solicitudIntercambio', [ContactosController::class, 'crear']);
+// Route::post('/solicitudIntercambio', [ContactosController::class, 'crear']);
 
-Route::post('/messages', [chatController::class, 'message']);
+// Route::post('/messages', [chatController::class, 'message']);

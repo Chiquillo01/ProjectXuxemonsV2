@@ -92,10 +92,11 @@ export class ContactosService {
    */
   getAllChat(userToken: string, idUser: string): Observable<Chat[]> {
     //console.log(userToken, SearchUser);
-
+    // console.log(`http://127.0.0.1:8000/api/show/${userToken}/&/${idUser}`);
     return this.http.get<Chat[]>(
       `http://127.0.0.1:8000/api/show/${userToken}/&/${idUser}`
     );
+
   }
 
   /**
@@ -111,7 +112,24 @@ export class ContactosService {
       searchUser: SearchUser,
       text: Texto
     };
-
-    return this.http.post<Users[]>('http://127.0.0.1:8000/api/mensaje', body);
+    console.log('http://127.0.0.1:8000/api/guardarmensaje', body);
+    return this.http.post<Users[]>('http://127.0.0.1:8000/api/guardarmensaje', body);
   }
+
+  /**
+   * Nombre: denegar
+   * Función: Obtener todas las chuches que tiene un usuario
+   * @returns la url de la api
+   */
+  liveChat(userToken: string, id2:string): Observable<any> {
+    //console.log(userToken, SearchUser);
+
+    const body = {
+      token: userToken,
+      searchUser: id2
+    };
+
+    return this.http.post<any>('http://127.0.0.1:8000/api/messages', body);
+  }
+
 }
