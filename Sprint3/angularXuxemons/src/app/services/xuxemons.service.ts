@@ -187,7 +187,7 @@ export class XuxemonsService {
   xuxemonActivo(userToken: string, xuxemon_id: number): Observable<any> {
     const body = {
       id_xuxemon: xuxemon_id,
-      tokenSesion: userToken,
+      token: userToken,
     };
 
     return this.http.post<any>(

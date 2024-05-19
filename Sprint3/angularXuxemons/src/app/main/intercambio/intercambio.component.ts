@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import Pusher from 'pusher-js';
-import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+// Imports extras //
+import { TokenService } from '../../services/token.service';
+import { IntercambioService } from '../../services/intercambio.service';
+import { XuxemonsUsers } from '../../models/xuxemons/xuxemons.model';
+import { UsersService } from 'src/app/services/users.service';
+import { Users } from 'src/app/models/users/users.model';
 
 @Component({
   selector: 'app-intercambio',
@@ -8,31 +13,212 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./intercambio.component.css'],
 })
 export class IntercambioComponent implements OnInit {
-  username: string = 'username';
-  message: string = '';
-  messages: any[] = [];
+  xuxemonsUser: XuxemonsUsers[] = [];
+  xuxemonsOtherUser: XuxemonsUsers[] = [];
+  idOtherUser!: string;
+  User: any = [];
+  OtherUser: any = [];
+  xuxemon1: any;
+  xuxemon2: any;
+  xuxemonOferta1: XuxemonsUsers | undefined;
+  xuxemonOferta2: XuxemonsUsers | undefined;
+  xuxemonId1: any;
+  xuxemonId2: any;
+  Ofertas: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private tokenService: TokenService,
+    private IntercambioService: IntercambioService,
+    private UsersService: UsersService,
+    private router: Router,
+    private route: ActivatedRoute // Nuevo servicio agregado aquí
+  ) {}
 
   ngOnInit(): void {
-    Pusher.logToConsole = true;
-
-    const pusher = new Pusher('070f21dbf126b2a0113c', {
-      cluster: 'eu',
+    // Captura el parámetro 'id' de la ruta
+    this.route.queryParams.subscribe((params) => {
+      const userId = params['id'];
+      if (userId) {
+        this.idOtherUser = userId;
+        this.getXuxemonsOtherUser(this.idOtherUser); // Llamar aquí después de asignar el ID
+      }
     });
 
-    const channel = pusher.subscribe('chat');
-    channel.bind('message', (data: any) => this.messages.push(data));
+    console.log(this.idOtherUser);
+    this.getXuxemonsUser();
   }
 
-  submit(): void {
-    // event.preventDefault(); // Evitar que el formulario se envíe automáticamente
-    this.http.post<any>('http://localhost:8000/api/messages', {
-        userName: this.username,
-        message: this.message,
-    }).subscribe(() => {
-        this.message = '';
-    });
-}
+  verOfertas() {
+    if (this.Ofertas) {
+      this.Ofertas = false;
+    } else {
+      this.Ofertas = true;
+    }
 
+    if (this.Ofertas) {
+      this.getShowTrade();
+    }
+
+    console.log(this.Ofertas);
+    console.log(this.getShowTrade);
+  }
+
+  getXuxemon1(xuxemon: XuxemonsUsers) {
+    this.xuxemon1 = xuxemon;
+    this.xuxemonId1 = xuxemon.xuxemon_id;
+  }
+
+  getXuxemon2(xuxemon: XuxemonsUsers) {
+    this.xuxemon2 = xuxemon;
+    this.xuxemonId2 = xuxemon.xuxemon_id;
+  }
+
+  getImageStyle(tamano: string): any {
+    let width: number;
+    const paqueno = 50;
+    const mediano = 100;
+    const grande = 150;
+
+    switch (tamano) {
+      case 'pequeno':
+        width = paqueno;
+        break;
+      case 'mediano':
+        width = mediano;
+        break;
+      case 'grande':
+        width = grande;
+        break;
+      default:
+        width = paqueno;
+        break;
+    }
+    return {
+      'width.px': width,
+    };
+  }
+
+  getXuxemonsUser() {
+    const userToken = this.tokenService.getToken();
+    if (userToken !== null) {
+      this.IntercambioService.getAllXuxemonsUser(userToken).subscribe({
+        next: (xuxemonsUser: any) => {
+          this.xuxemonsUser = xuxemonsUser[0];
+        },
+        error: (error) => {
+          console.error('Error fetching Xuxemons:', error);
+        },
+      });
+
+      this.IntercambioService.getUsuario(userToken).subscribe({
+        next: (user: Users[]) => {
+          this.User = user[0].nick;
+        },
+        error: (error) => {
+          console.error('Error fetching user:', error);
+        },
+      });
+    } else {
+      console.error('User token is null');
+    }
+  }
+
+  getXuxemonsOtherUser(idUser: string) {
+    if (idUser !== null) {
+      this.IntercambioService.getAllXuxemonsOtherUser(idUser).subscribe({
+        next: (xuxemonsUser: any) => {
+          this.xuxemonsOtherUser = xuxemonsUser[0];
+        },
+        error: (error) => {
+          console.error('Error fetching Xuxemons:', error);
+        },
+      });
+
+      this.IntercambioService.getUsuario(idUser).subscribe({
+        next: (otherUser: Users[]) => {
+          // this.OtherUser = otherUser[0].nick;
+        },
+        error: (error) => {
+          console.error('Error fetching other user:', error);
+        },
+      });
+    } else {
+      console.error('Other user ID is null');
+    }
+  }
+
+  getShowTrade() {
+    const userToken = this.tokenService.getToken();
+
+    if (this.idOtherUser && userToken) {
+      this.IntercambioService.Intercambio1(
+        userToken,
+        this.idOtherUser
+      ).subscribe({
+        next: (xuxemonsUser1: any) => {
+          console.log(xuxemonsUser1);
+          // Asignar los Xuxemons a las variables correspondientes
+          this.xuxemonOferta1 = xuxemonsUser1;
+          console.log('Xuxemon Oferta 1:', this.xuxemonOferta1);
+        },
+        error: (error) => {
+          console.error('Error fetching Xuxemons:', error);
+        },
+      });
+
+      this.IntercambioService.Intercambio2(
+        userToken,
+        this.idOtherUser
+      ).subscribe({
+        next: (xuxemonsUser2: any) => {
+          console.log(xuxemonsUser2);
+          // Asignar los Xuxemons a las variables correspondientes
+          this.xuxemonOferta2 = xuxemonsUser2;
+          console.log('Xuxemon Oferta 2:', this.xuxemonOferta2);
+        },
+        error: (error) => {
+          console.error('Error fetching Xuxemons:', error);
+        },
+      });
+    }
+  }
+
+  //pensar como mandar la peticion
+  solicitudIntercambio() {
+    const userToken = this.tokenService.getToken();
+
+    if (this.idOtherUser && userToken) {
+      this.IntercambioService.solicitudTrade(
+        userToken,
+        this.xuxemonId1,
+        this.idOtherUser,
+        this.xuxemonId2
+      ).subscribe({
+        next: (xuxemonsUser: any) => {
+          this.xuxemonsOtherUser = xuxemonsUser[0];
+        },
+        error: (error) => {
+          console.error('Error fetching Xuxemons:', error);
+        },
+      });
+    }
+  }
+
+  acceptarIntercambio() {
+    const userToken = this.tokenService.getToken();
+
+    if (this.idOtherUser && userToken && this.xuxemonOferta1 && this.xuxemonOferta2) {
+      this.IntercambioService.acceptTrade(
+        userToken,
+        this.xuxemonOferta1.xuxemon_id,
+        this.idOtherUser,
+        this.xuxemonOferta2.xuxemon_id
+      ).subscribe({
+        next: () => {},
+        error: (error) => {
+          console.error('Error fetching Xuxemons:', error);
+        },
+      });
+    }
+  }
 }

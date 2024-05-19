@@ -11,7 +11,7 @@
                     <div class="user" *ngIf="amigos.estado == 2">
                         <img class="imagen" src={{amigos.imagen}}>
                         <h4 class="nombre">{{amigos.nick}}</h4>
-                        <a class="enviarMensaje" (click)="intercambio()">
+                        <a class="enviarMensaje" (click)="intercambio(amigos.idUser)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2">

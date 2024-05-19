@@ -120,6 +120,13 @@ class XuxemonsUserController extends Controller
         }
     }
 
+    /**
+     * Nombre: show
+     * Función: Enviar los datos para que se muestren en el frontend
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
 
     /**
      * Nombre: showActivos

@@ -9,6 +9,7 @@ use \App\Http\Controllers\XuxemonsUserController;
 use App\Http\Controllers\ChuchesUserController;
 use App\Http\Controllers\ContactosController;
 use App\Http\Controllers\EnfermedadesUserController;
+use App\Http\Controllers\IntercambioController;
 
 // Rutas para los Xuxemons // 
 // Creación de Xuxemons //
@@ -95,3 +96,19 @@ Route::get('/show/{userToken}/&/{idUser}', [ContactosController::class, 'showCha
 // Route::post('/solicitudIntercambio', [ContactosController::class, 'crear']);
 
 // Route::post('/messages', [chatController::class, 'message']);
+
+// Mostrar todos los xuxemons del usuario //
+Route::get('/xuxemonsOtherUser/{userId}', [IntercambioController::class, 'showXuxemonsUser']);
+// Mostrar todos los xuxemons del usuario //
+Route::get('/otherUsuario/{userToken}', [IntercambioController::class, 'showOtherUser']);
+
+Route::get('/showTrade/{userToken}', [IntercambioController::class, 'mostrarIntercambio']);
+
+//implementar las rutas en el servicio
+// Mostrar todos los xuxemons del usuario //
+Route::post('/trade', [IntercambioController::class, 'solicitudIntercambio']);
+
+Route::post('/acceptTrade', [IntercambioController::class, 'acceptarIntercambio']);
+
+Route::get('/xuxemonsTrade1/{usertoken}/{idUser}', [IntercambioController::class, 'xuxemonsIntercambio1']);
+Route::get('/xuxemonsTrade2/{usertoken}/{idUser}', [IntercambioController::class, 'xuxemonsIntercambio2']);

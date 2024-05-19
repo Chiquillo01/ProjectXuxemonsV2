@@ -342,7 +342,7 @@ export class ContactosComponent implements OnInit {
     // });
   }
 
-  intercambio() {
-    this.router.navigate(['/home/home/intercambio'], { queryParams: {} });
+  intercambio(idUser: string) {
+    this.router.navigate(['/home/home/intercambio'], { queryParams: { id: idUser} });
   }
 }
